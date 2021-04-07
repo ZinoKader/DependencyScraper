@@ -1,4 +1,4 @@
-import git
+import math
 from bs4 import BeautifulSoup
 import pathlib
 import re
@@ -12,6 +12,7 @@ import csv
 from datetime import datetime
 from shutil import rmtree
 import os
+from concurrent.futures import ProcessPoolExecutor
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -39,7 +40,7 @@ async def fetch(session, item):
 
 async def get_repo_packages(repos):
     async with ClientSession() as session:
-        for _, row in tqdm(repos.iterrows(), total=repos.shape[0], desc="fetching package.json files for repos"):
+        for _, row in repos.iterrows():
             # visit the main repo to find the file_finder_url (https://github.com/facebook/react/find/{master/main})
             repo_url = row["url"]
             repo_owner = row["url"].split("/")[-2]
@@ -152,7 +153,19 @@ async def main():
     repos['url'] = repos['url'].str.replace(
         "api.github.com/repos", "github.com")
 
-    await get_repo_packages(repos)
+    # run repo package.json collection in x different processes
+    process_count = 6
+    with ProcessPoolExecutor(max_workers=process_count) as e:
+        total_repos = len(repos)
+        start = 0
+        end = math.floor(total_repos / process_count)
+        for i in range(process_count):
+            if i == process_count - 1:
+                end = total_repos - 1
+            print(start, end)
+            e.submit(get_repo_packages, repos[start:end])
+            start = math.floor(end)
+            end += math.floor(total_repos / process_count)
 
     res = set()
 
@@ -192,7 +205,7 @@ async def main():
         outfile.write(packed)
 
     # Remove the cloned repos
-    rmtree("repos")
+    # rmtree("repos")
 
 
 if __name__ == "__main__":
