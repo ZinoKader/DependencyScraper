@@ -4,7 +4,6 @@ import pathlib
 import re
 import json
 from aiohttp import ClientSession
-import requests
 import asyncio
 import msgpack
 import pandas as pd
@@ -13,6 +12,8 @@ import csv
 from datetime import datetime
 from shutil import rmtree
 import os
+
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 # Load dependency cache from file
 try:
@@ -39,8 +40,10 @@ async def fetch(session, item):
 async def get_repo_packages(repos):
     async with ClientSession() as session:
         for _, row in tqdm(repos.iterrows(), total=repos.shape[0], desc="fetching package.json files for repos"):
-            # visit the main repo to find the file_finder_url (it lives in /find/{master/main/whatevermainbranchiscalled})
+            # visit the main repo to find the file_finder_url (https://github.com/facebook/react/find/{master/main})
             repo_url = row["url"]
+            repo_owner = row["url"].split("/")[-2]
+            repo_name = row["url"].split("/")[-1]
             raw_repo_url = repo_url.replace(
                 "https://github.com", "https://raw.githubusercontent.com")
 
@@ -60,7 +63,6 @@ async def get_repo_packages(repos):
                 file_finder_anchor_tag.attrs["href"]
             # get the main branch name while we're at it (https://github.com/facebook/react/find/master) --> master
             main_branch_name = repo_file_finder_url.split("/")[-1]
-            repo_file_finder_url
             repo_file_finder_page = await session.get(repo_file_finder_url)
             repo_file_finder_html = await repo_file_finder_page.text()
             repo_file_finder_bs_object = BeautifulSoup(
@@ -86,6 +88,16 @@ async def get_repo_packages(repos):
                 raw_repo_url + "/" + main_branch_name + "/" + path for path in repo_paths if "package.json" in path and "node_modules" not in path]
 
             print(repo_filetree_url, package_file_paths)
+
+            for idx, package_file_url in enumerate(package_file_paths):
+                package_file_page = await session.get(package_file_url)
+                package_file = await package_file_page.text()
+                filename = os.path.join(
+                    CURRENT_FOLDER, "repos", repo_owner + "_" + repo_name, "package" + str(idx) + ".json")
+                # create dir if it doesn't exist and write package.json files
+                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                with open(filename, "w+") as file:
+                    file.write(package_file)
 
 
 async def get_repo_dependencies(repo_url, repo_id):
