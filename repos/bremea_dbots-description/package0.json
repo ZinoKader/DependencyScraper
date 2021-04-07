@@ -1,0 +1,30 @@
+{
+  "name": "dbots-description",
+  "version": "1.0.0",
+  "description": "Teaching bot devs how to write, one long description at a time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bremea/dbots-description.git"
+  },
+  "keywords": [
+    "anish"
+  ],
+  "author": "bremea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bremea/dbots-description/issues"
+  },
+  "homepage": "https://github.com/bremea/dbots-description#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "node-html-parser": "^2.0.0",
+    "path": "^0.12.7",
+    "rimraf": "^3.0.2",
+    "website-scraper": "^4.2.3"
+  }
+}

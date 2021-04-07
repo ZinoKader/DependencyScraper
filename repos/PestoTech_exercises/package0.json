@@ -1,0 +1,26 @@
+{
+  "name": "02",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Arfat Salman",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "mongodb": "*"
+  },
+  "devDependencies": {
+    "@babel/cli": "*",
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "babel-core": "^7.0.0-bridge",
+    "babel-jest": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-react": "*",
+    "jest": "*"
+  }
+}

@@ -1,0 +1,28 @@
+{
+	"name": "github_customaction",
+	"version": "1.0.1",
+	"description": "update workitem state on pull request change",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CanarysPlayground/github_customaction.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/CanarysPlayground/github_customaction/issues"
+	},
+	"homepage": "https://github.com/CanarysPlayground/github_customaction#readme",
+	"dependencies": {
+		"@actions/core": "^1.2.6",
+		"@actions/github": "^2.2.0",
+		"azure-devops-node-api": "^10.1.1",
+		"btoa": "^1.2.1",
+		"is-plain-object": "^3.0.0",
+		"node-fetch": "^2.6.1"
+	}
+}

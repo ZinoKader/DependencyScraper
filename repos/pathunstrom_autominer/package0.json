@@ -1,0 +1,30 @@
+{
+  "name": "autominer",
+  "version": "0.1.0",
+  "description": "A canvas based idle game.",
+  "main": "autominer.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "build": "browserify -d ./src/autominer.js -o ./resources/js/am.js"
+  },
+  "author": "Piper Thunstrom",
+  "license": "ISC",
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "mocha": "^3.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pathunstrom/autominer.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "bugs": {
+    "url": "https://github.com/pathunstrom/autominer/issues"
+  },
+  "homepage": "https://github.com/pathunstrom/autominer#readme"
+}

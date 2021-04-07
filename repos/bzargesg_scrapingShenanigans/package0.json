@@ -1,0 +1,21 @@
+{
+  "name": "cheese_website_Scrape",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getcheeses.js",
+  "scripts": {
+    "getCheeseUrl": "node getcheeses.js",
+    "setupDB": "psql -h localhost -d cheese -U cheesescript -p 5432 -a -f ./db/scripts/cheeseData.sql",
+    "clearDB": "psql -h localhost -d cheese -U cheesescript -p 5432 -a -f ./db/scripts/clearDB.sql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^16.4.0",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.4.0"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "@istreamplanet/github-actions",
+  "version": "1.0.0",
+  "description": "iStreamPlanet's github actions",
+  "scripts": {
+    "build": "npm-run-all -p build:*",
+    "build:build-workspace-matrix": "ncc build build-workspace-matrix/main.ts -o build-workspace-matrix/dist -m",
+    "build:find-path-owners": "ncc build find-path-owners/main.ts -o find-path-owners/dist -m",
+    "build:minimize-comments": "ncc build minimize-comments/main.ts -o minimize-comments/dist -m",
+    "build:update-issue": "ncc build update-issue/main.ts -o update-issue/dist -m",
+    "build:helmfile-dependency-check": "ncc build helmfile-dependency-check/main.ts -o helmfile-dependency-check/dist -m",
+    "test": "jest"
+  },
+  "author": "iStreamPlanet",
+  "license": "ISC",
+  "devDependencies": {
+    "@octokit/webhooks": "^7.21.0",
+    "@types/jest": "^26.0.20",
+    "@types/js-yaml": "^3.12.5",
+    "@types/minimatch": "^3.0.3",
+    "@vercel/ncc": "^0.27.0",
+    "jest": "^26.6.3",
+    "npm-run-all": "^4.1.5",
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.2.2"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "@actions/glob": "^0.1.1",
+    "js-yaml": "^3.14.1",
+    "minimatch": "^3.0.4"
+  }
+}

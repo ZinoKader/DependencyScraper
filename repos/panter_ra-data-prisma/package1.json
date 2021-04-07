@@ -1,0 +1,39 @@
+{
+  "name": "@ra-data-prisma/backend",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "Marco Wettstein <maw@panter.ch>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "lib-es/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib",
+    "lib-es"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "yarn build:cjs && yarn build:es",
+    "build:cjs": "rimraf ./lib && tsc --project tsconfig.json --outDir lib --module commonjs",
+    "build:es": "rimraf ./lib-es && tsc --project tsconfig.json",
+    "prepublish": "yarn build"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "pluralize": "^7.0.0"
+  },
+  "peerDependencies": {
+    "nexus": ">=1.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.2"
+  }
+}

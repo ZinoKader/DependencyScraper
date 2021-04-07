@@ -1,0 +1,35 @@
+{
+    "name": "crypto-adventure",
+    "version": "2.1.1",
+    "description": "an educational cyptography adventure",
+    "bin": {
+        "crypto-adventure": "bin/cmd.js"
+    },
+    "dependencies": {
+        "workshopper": "0.4.1",
+        "utf8-bytes": "x",
+        "rimraf": "~2.2.2",
+        "after": "~0.8.1",
+        "echomunge": "~0.2.0",
+        "readable-stream": "~1.0.15",
+        "through2-map": "~1.1.0",
+        "through2": "~0.2.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/FotoVerite/cyrpto-adventure.git"
+    },
+    "homepage": "https://github.com/FotoVerite/crypto-adventure",
+    "keywords": [
+        "cryptography",
+        "educational",
+        "guide",
+        "tutorial",
+        "learn"
+    ],
+    "author": {
+        "name": "Matthew Bergman",
+        "email": "matt@novafabrica.com"
+    },
+    "license": "MIT"
+}

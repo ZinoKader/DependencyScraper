@@ -1,0 +1,10 @@
+{
+  "name": "FileUpalodDemo",
+  "version": "0.0.0",
+  "description": "FileUpalodDemo",
+  "main": "app.js",
+  "author": {
+    "name": "Dhananjay",
+    "email": ""
+  }
+}

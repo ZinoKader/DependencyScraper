@@ -1,0 +1,28 @@
+{
+  "name": "odh-cli",
+  "version": "1.0.0",
+  "description": "A command-line interface the ODH blockchain and IPFS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "odh": "./index.js"
+  },
+  "author": "MOKTAR ALHASAPI BAVA",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "base58": "^1.0.1",
+    "chalk": "^2.4.1",
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.15.1",
+    "express": "^4.16.3",
+    "ipfs-api": "^22.1.0",
+    "node-pandoc": "^0.3.0",
+    "progress": "^2.0.0",
+    "solc": "^0.4.24",
+    "truffle-contract": "^3.0.6",
+    "web3": "^1.0.0-beta.34"
+  }
+}

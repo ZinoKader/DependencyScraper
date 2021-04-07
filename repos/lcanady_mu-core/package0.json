@@ -1,0 +1,28 @@
+{
+  "name": "@ursamu/core",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "MUSH",
+    "MUD",
+    "Server"
+  ],
+  "author": "Lemuel Canady, Jr",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "gradient-string": "^1.2.0",
+    "js-sha512": "^0.8.0",
+    "nedb": "^1.8.0",
+    "node-ipc": "^9.1.1",
+    "pegjs": "^0.10.0",
+    "tinygradient": "^1.1.2",
+    "uuid": "^8.1.0",
+    "ws": "^7.3.0",
+    "yaml": "^1.10.0"
+  }
+}

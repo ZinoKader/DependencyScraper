@@ -1,0 +1,12 @@
+{
+  "name": "getting-started",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.1.1",
+    "graphql-relay": "^0.6.0"
+  }
+}

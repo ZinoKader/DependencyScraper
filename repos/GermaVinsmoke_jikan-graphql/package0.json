@@ -1,0 +1,29 @@
+{
+	"name": "graphqlserver",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node src/server.js",
+		"server": "nodemon src/server.js",
+		"apollo-graph": "apollo service:push",
+		"deploy": "now --prod"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"apollo-datasource-rest": "^0.6.10",
+		"apollo-server": "^2.9.14",
+		"graphql": "^14.5.8",
+		"graphql-rate-limit-directive": "^1.2.0",
+		"lodash": "^4.17.15",
+		"node-fetch": "^2.6.0"
+	},
+	"devDependencies": {
+		"apollo": "^2.21.2",
+		"nodemon": "^2.0.2",
+		"now": "^16.7.0"
+	}
+}

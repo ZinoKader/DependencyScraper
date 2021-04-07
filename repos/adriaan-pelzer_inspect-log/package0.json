@@ -1,0 +1,27 @@
+{
+  "name": "inspect-log",
+  "version": "0.0.3",
+  "description": "Combine eyes.inspector with console.log to provide pretty printing of objects, and normal printing of strings or numbers",
+  "main": "inspect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/adriaan-pelzer/inspect-log.git"
+  },
+  "keywords": [
+    "inspect",
+    "console.log",
+    "printing"
+  ],
+  "author": "Adriaan Pelzer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adriaan-pelzer/inspect-log/issues"
+  },
+  "homepage": "https://github.com/adriaan-pelzer/inspect-log#readme",
+  "dependencies": {
+    "eyes": "^0.1.8"
+  }
+}

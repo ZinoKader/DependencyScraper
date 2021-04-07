@@ -1,0 +1,25 @@
+{
+  "name": "challenge-gate-keeper-middleware",
+  "version": "0.0.1",
+  "description": "Challenge to create gatekeeper middleware",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "query-string": "^4.3.4"
+  },
+  "engines": {
+    "node": "6.10.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/welcome-project"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}

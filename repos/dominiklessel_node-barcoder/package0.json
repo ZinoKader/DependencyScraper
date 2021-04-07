@@ -1,0 +1,32 @@
+{
+  "name": "barcoder",
+  "version": "2.0.1",
+  "description": "GTIN validation made simple",
+  "keywords": [
+    "EAN",
+    "GTIN",
+    "validator",
+    "barcode"
+  ],
+  "author": "Dominik Lessel <dominik@mifitto.com>",
+  "repository": "git://github.com/dominiklessel/barcoder.git",
+  "devDependencies": {
+    "tape": "^3.0.0"
+  },
+  "scripts": {
+    "test": "make test-unit"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/20..latest",
+      "firefox/10..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6"
+    ]
+  },
+  "main": "index"
+}

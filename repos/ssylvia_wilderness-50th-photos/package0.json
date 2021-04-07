@@ -1,0 +1,26 @@
+{
+  "name": "playlist",
+  "version": "2.1.1",
+  "description": "A storytelling template that organizes point data sets from a CSV file embedded in your web map into an organized interactive list.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssylvia/playlist.git"
+  },
+  "author": "Esri Story Maps",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ssylvia/playlist/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-concat": "~0.2.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-compress": "~0.5.2",
+    "grunt-convert": "^0.1.11",
+    "grunt-exec": "^0.4.5"
+  }
+}

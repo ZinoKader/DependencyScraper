@@ -1,0 +1,10 @@
+{
+  "name": "EchoServerDemo",
+  "version": "0.0.0",
+  "description": "EchoServerDemo",
+  "main": "app.js",
+  "author": {
+    "name": "Dhananjay",
+    "email": ""
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "name": "veientilarbeid",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "6.1.1",
+    "@metrics/prometheus-consumer": "3.0.1",
+    "@podium/podlet": "4.4.14",
+    "classnames": "2.2.6",
+    "craco-less": "1.17.1",
+    "express": "4.17.1",
+    "less": "3.13.1",
+    "nav-frontend-chevron": "1.0.28",
+    "nav-frontend-chevron-style": "1.0.4",
+    "nav-frontend-core": "5.0.11",
+    "nav-frontend-lenkepanel": "1.0.75",
+    "nav-frontend-lenkepanel-style": "1.0.2",
+    "nav-frontend-paneler": "2.0.32",
+    "nav-frontend-paneler-style": "1.0.2",
+    "nav-frontend-typografi": "3.0.4",
+    "nav-frontend-typografi-style": "1.0.35",
+    "prom-client": "13.1.0",
+    "prop-types": "15.7.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "swr": "0.5.3"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.11.9",
+    "@testing-library/react": "11.2.5",
+    "@testing-library/user-event": "12.8.3",
+    "@types/jest": "26.0.20",
+    "@types/node": "14.14.34",
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.2",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "husky": "4.3.8",
+    "lint-staged": "10.5.4",
+    "msw": "0.27.1",
+    "prettier": "2.2.1",
+    "react-scripts": "4.0.3",
+    "typescript": "4.2.3"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "bump": "npx npm-check-updates --target minor -u && npm i",
+    "test": "npm run lint && craco test",
+    "test-ci": "npm run lint && CI=true craco test",
+    "refresh": "rm -rf node_modules && rm package-lock.json && npm i",
+    "typeCheck": "tsc",
+    "lint": "eslint --ext .tsx,.js,.ts,.jsx src",
+    "podlet": "node podlet.js"
+  },
+  "eslintConfig": {
+    "plugins": [
+      "jsx-a11y"
+    ],
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "plugin:jsx-a11y/recommended"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run typeCheck && npm run test-ci"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,json,md,ts,tsx}": "prettier --write"
+  }
+}

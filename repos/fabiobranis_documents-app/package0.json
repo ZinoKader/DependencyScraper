@@ -1,0 +1,35 @@
+{
+  "name": "document-app-express-server",
+  "version": "1.0.0",
+  "description": "The server side of the document app, wich the user can store documents and blacklist then.",
+  "main": "src/index.js",
+  "scripts": {
+    "serve": "babel-node ./src/index.js",
+    "watch": "nodemon --exec babel-node ./src/index.js",
+    "build": "rm -rf ./build && babel ./src --copy-files --out-dir build",
+    "start": "node ./build/index.js"
+  },
+  "author": "Fábio Branis",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "limax": "^1.7.0",
+    "mongoose": "^5.4.19",
+    "mongoose-paginate-v2": "^1.0.24",
+    "sanitize-html": "^1.20.0",
+    "swagger-ui-express": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/polyfill": "^7.4.0",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/runtime": "^7.4.0",
+    "eslint": "^5.15.2",
+    "nodemon": "^1.18.10"
+  }
+}

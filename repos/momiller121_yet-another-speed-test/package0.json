@@ -1,0 +1,33 @@
+{
+  "name": "yet-another-speed-test",
+  "version": "0.0.1",
+  "description": "Browser / Node.js (server side) based speed test with a focus on support for IE6.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "~4.9.x",
+    "bunyan": "^1.2.3",
+    "node-uuid": "^1.4.2",
+    "range_check":"^0.0.5"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/momiller121/yet-another-speed-test.git"
+  },
+  "keywords": [
+    "speed",
+    "test",
+    "node"
+  ],
+  "author": "Mark Miller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/momiller121/yet-another-speed-test/issues"
+  },
+  "homepage": "https://github.com/momiller121/yet-another-speed-test"
+}

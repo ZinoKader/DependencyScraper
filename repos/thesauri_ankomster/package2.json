@@ -1,0 +1,14 @@
+{
+    "name": "flyginfo",
+    "description": "Departure and arrival times for Swedavia's airports",
+    "version": "1.0.0",
+    "license": "MIT",
+    "engines": {
+      "node": "14.x",
+      "yarn": "1.22.10"
+    },
+    "scripts": {
+        "build": "cd frontend/ && yarn && yarn build && cp -r build/ ../backend/ && cd ../backend/ && rm -r public/ && mv build/ public/ && yarn",
+        "start": "cd backend/ && yarn start"
+    }
+  }

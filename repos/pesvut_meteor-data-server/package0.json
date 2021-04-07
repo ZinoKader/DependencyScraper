@@ -1,0 +1,24 @@
+{
+  "name": "react-parcel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "proxy": "http://pesvut.ng.netsoc.ie:57988",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "DIAS - Nicky Pochinkov",
+  "license": "ISC",
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "path": "^0.12.7",
+    "sequelize": "^5.21.13"
+  }
+}

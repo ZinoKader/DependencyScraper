@@ -1,0 +1,30 @@
+{
+  "name": "twiger",
+  "version": "0.0.1",
+  "description": "Testing Twig templates via Jest",
+  "main": "Twiger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vikkivi/twigTest.git"
+  },
+  "keywords": [
+    "twig",
+    "jest",
+    "unit",
+    "tests"
+  ],
+  "author": "Viktoria Postnova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vikkivi/twigTest/issues"
+  },
+  "homepage": "https://github.com/Vikkivi/twigTest#readme",
+  "dependencies": {
+    "jest-snapshot-serializer-raw": "^1.1.0",
+    "pretty": "^2.0.0",
+    "twig": "^1.14.0"
+  }
+}

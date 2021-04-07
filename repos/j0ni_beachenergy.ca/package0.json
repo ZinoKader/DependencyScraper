@@ -1,0 +1,38 @@
+{
+  "name": "beachpower.ca",
+  "description": "Beach Energy Website",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Jonathan Irving <j@lollyshouse.ca>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/j0ni/beachenergy.ca.git"
+  },
+  "scripts": {
+    "start": "node app",
+    "test": "make test REPORTER=spec"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "jade": "*",
+    "less-middleware": "*",
+    "mongoose": "*",
+    "underscore": "*",
+    "async": "0.1.22",
+    "marked": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "bcrypt": "*",
+    "connect-flash": "*",
+    "connect-mongo": "*",
+    "nodemailer": "0.3.x",
+    "recaptcha": "1.x"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "supertest": "*",
+    "superagent": "*",
+    "jshint": "~2.3.0"
+  }
+}

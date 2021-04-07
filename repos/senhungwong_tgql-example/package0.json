@@ -1,0 +1,41 @@
+{
+  "name": "tgql-example",
+  "version": "1.0.0",
+  "description": "description",
+  "engines": {
+    "yarn": "1.7.0"
+  },
+  "scripts": {
+    "graphdoc": "graphdoc -s ./src/schema.graphql -o ./docs -f",
+    "serve": "nodemon --exec ts-node --files src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senhungwong/tgql-example.git"
+  },
+  "author": {
+    "name": "Senhung Wong",
+    "url": "https://github.com/senhungwong"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/senhungwong/tgql-example/issues"
+  },
+  "homepage": "https://github.com/senhungwong/tgql-example#readme",
+  "dependencies": {
+    "apollo-server": "^2.3.1",
+    "class-validator": "^0.9.1",
+    "dotenv": "^6.2.0",
+    "neo4j-driver": "^1.7.2",
+    "reflect-metadata": "^0.1.12",
+    "type-graphql": "^0.16.0"
+  },
+  "devDependencies": {
+    "@2fd/graphdoc": "^2.4.0",
+    "@types/dotenv": "^6.1.0",
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  }
+}

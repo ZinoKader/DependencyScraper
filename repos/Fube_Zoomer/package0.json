@@ -1,0 +1,28 @@
+{
+  "name": "Zoomer",
+  "version": "1.0.0",
+  "description": "```javascript\r /**\r * Notes:\r *  \r *\t-To use different links for different classes, you MUST omit the zoom field.\r *\t-To use autojoin, you MUST add autojoin: true. Omiting it will assume autojoin is false.\r */\r {\r     \"courses\" : [\r         {\r \t\t\t\"name\": \"Foo\",\r \t\t\t\"teacher\": \"Bar Baz\",\r \t\t\t\"when\": [\r \t\t\t\t[\"Tuesday\", [\"8:00\", \"9:30\"]],\r \t\t\t\t[\"Thursday\", [\"9:30\", \"11:00\"]]\r \t\t\t],\r \t\t\t\"zoom\": {\r \t\t\t\t\"id\": \"123456\",\r \t\t\t\t\"pwd\": \"xxx\",\r \t\t\t\t\"link\": \"https://www.zoom.us/j/123456767?pwd=oogaboogahereismypassword\"\r \t\t\t}\r \t\t},\r \t\t{\r \t\t\t\"name\": \"Qux\",\r \t\t\t\"teacher\": \"Quux Corge\",\r \t\t\t\"when\": [\r \t\t\t\t[\"Tuesday\", [\"9:30\", \"11:00\"], [\"idHere\", \"passWordHere\", \"linkHere. Yes order matters.\"]],\r \t\t\t\t[\"Friday\", [\"11:00\", \"12:30\"], [\"12345\", \"foobarbaz\", \"https://www.zoom.us/j/123456\"]]\r \t\t\t],\r \t\t\t\"autojoin\": true\r \t\t}\r     ]\r }\r ```\r For the autojoin function to work correctly, you need to setup \"Always open these types of link in the associated app\" on your default browser. From what I know, Chrome removed this option in v76. If you use Chrome, sucks to be you. Use a good browser like Firefox.",
+  "main": "index.js",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cron": "^1.8.2",
+    "luxon": "^1.25.0",
+    "sprintfjs": "^1.2.17",
+    "yargs-parser": "^20.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fube/Zoomer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fube/Zoomer/issues"
+  },
+  "homepage": "https://github.com/Fube/Zoomer#readme"
+}

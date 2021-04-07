@@ -10,9 +10,7 @@ import pandas as pd
 from tqdm import tqdm
 import csv
 from datetime import datetime
-from shutil import rmtree
 import os
-from concurrent.futures import ProcessPoolExecutor
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -40,7 +38,7 @@ async def fetch(session, item):
 
 async def get_repo_packages(repos):
     async with ClientSession() as session:
-        for _, row in repos.iterrows():
+        for _, row in tqdm(repos.iterrows(), total=repos.shape[0], desc="fetching repo packages"):
             # visit the main repo to find the file_finder_url (https://github.com/facebook/react/find/{master/main})
             repo_url = row["url"]
             repo_owner = row["url"].split("/")[-2]
@@ -57,6 +55,7 @@ async def get_repo_packages(repos):
             file_finder_anchor_tag = repo_html_bs_object.find(
                 "a", href=re.compile("/find/"))
             if not hasattr(file_finder_anchor_tag, "attrs"):
+                print("file finder", repo_url)
                 continue
 
             # visit the file finder page to find the URL to the filetree (it contains a weird hash at the end that we need)
@@ -72,6 +71,7 @@ async def get_repo_packages(repos):
             # select the tag that has the filetree URL
             repo_filetree_tag = repo_file_finder_bs_object.find("fuzzy-list")
             if not hasattr(repo_filetree_tag, "attrs"):
+                print(file_finder_anchor_tag)
                 continue
 
             # visit the filetree with the requested-with header (it 400's without it, maybe anti-scrape measure?)
@@ -87,8 +87,6 @@ async def get_repo_packages(repos):
             # find and collect urls to packagefiles in filetree
             package_file_paths = [
                 raw_repo_url + "/" + main_branch_name + "/" + path for path in repo_paths if "package.json" in path and "node_modules" not in path]
-
-            print(repo_filetree_url, package_file_paths)
 
             for idx, package_file_url in enumerate(package_file_paths):
                 package_file_page = await session.get(package_file_url)
@@ -153,6 +151,8 @@ async def main():
     repos['url'] = repos['url'].str.replace(
         "api.github.com/repos", "github.com")
 
+    await get_repo_packages(repos)
+    """
     # run repo package.json collection in x different processes
     process_count = 6
     with ProcessPoolExecutor(max_workers=process_count) as e:
@@ -166,6 +166,7 @@ async def main():
             e.submit(get_repo_packages, repos[start:end])
             start = math.floor(end)
             end += math.floor(total_repos / process_count)
+    """
 
     res = set()
 

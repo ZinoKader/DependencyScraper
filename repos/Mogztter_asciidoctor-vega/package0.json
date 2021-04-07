@@ -1,0 +1,31 @@
+{
+  "name": "asciidoctor-vega",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mogztter/asciidoctor-vega.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mogztter/asciidoctor-vega/issues"
+  },
+  "homepage": "https://github.com/Mogztter/asciidoctor-vega#readme",
+  "dependencies": {
+    "vega": "^5.9.1",
+    "vega-embed": "^6.2.2",
+    "vega-lite": "^4.2.0"
+  },
+  "devDependencies": {
+    "@asciidoctor/core": "^2.1.1",
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^7.0.1"
+  }
+}

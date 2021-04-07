@@ -1,0 +1,50 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "start:deploy": "node src/server.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
+  },
+  "engines": {
+    "node": "10.19.0",
+    "npm": "",
+    "yarn": "1.22.5"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cypress": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "moment": "^2.29.1",
+    "mongoose": "^5.9.1",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4",
+    "util": "^0.12.1",
+    "winston": "^3.2.1",
+    "yup": "^0.27.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.2.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.2.1",
+    "sucrase": "^3.10.1"
+  }
+}

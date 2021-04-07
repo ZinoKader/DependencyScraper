@@ -1,0 +1,25 @@
+{
+  "name": "nalda",
+  "version": "1.0.0",
+  "description": "Programming language to create music by numbers and javascript templates.",
+  "main": "watcher.js",
+  "scripts": {
+    "up": "alda downup",
+    "lint": "node linter.js",
+    "build": "node dev/build.js",
+    "watch": "node watcher.js",
+    "clean": "rm composer/*.calda composer/*.talda composer/*.alda",
+    "start": "npm run up && npm run watch"
+  },
+  "keywords": ["alda", "music"],
+  "author": "allnulled",
+  "license": "WTFPL",
+  "dependencies": {
+    "@allnulled/asynchandler": "0.0.1",
+    "chokidar": "^3.0.1",
+    "ejs": "^3.1.5",
+    "ejs-lint": "^1.1.0",
+    "execute-command-sync": "^1.0.2",
+    "pegjs": "^0.10.0"
+  }
+}

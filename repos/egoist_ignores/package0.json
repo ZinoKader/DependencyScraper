@@ -1,0 +1,38 @@
+{
+  "name": "ignores",
+  "version": "0.0.2",
+  "description": "gitignore as a service",
+  "license": "MIT",
+  "repository": "egoist/ignores",
+  "author": {
+    "name": "EGOIST",
+    "email": "0x142857@gmail.com",
+    "url": "github.com/egoist"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "npm run postinstall && xo && ava",
+    "postinstall": "node ./postinstall.js"
+  },
+  "keywords": [
+    "gitignore"
+  ],
+  "files": [
+    "gitignore",
+    "index.js",
+    "postinstall.js"
+  ],
+  "devDependencies": {
+    "ava": "*",
+    "xo": "*"
+  },
+  "xo": {
+    "semicolon": false
+  },
+  "dependencies": {
+    "co": "^4.6.0",
+    "pify": "^2.3.0"
+  }
+}

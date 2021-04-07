@@ -1,0 +1,16 @@
+{
+  "name": "game-search",
+  "version": "1.0.0",
+  "description": "Simple tic tac game",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build-win":"electron-packager . game-search --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.HSTechnologies=CE --version-string.FileDescription=CE --version-string.ProductName=\"Game Search\""
+  },
+  "devDependencies": {
+    "electron": "^8.2.5",
+    "electron-packager": "^14.2.1"
+  },
+  "author": "JKRuigu",
+  "license": "ISC"
+}

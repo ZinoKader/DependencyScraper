@@ -1,0 +1,29 @@
+{
+  "name": "benja",
+  "version": "0.2.1",
+  "description": "Bootable Electron Node JS Application helper.",
+  "main": "./benja.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebReflection/benja-module.git"
+  },
+  "keywords": [
+    "kiosk",
+    "electron",
+    "archlinux",
+    "node",
+    "JS",
+    "linux",
+    "nodejs",
+    "IoT"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WebReflection/benja-module/issues"
+  },
+  "homepage": "https://github.com/WebReflection/benja-module#readme"
+}

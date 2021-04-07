@@ -1,0 +1,65 @@
+{
+  "name": "react-submittable",
+  "version": "2.0.0",
+  "description": "a replacement for preventing the default behavior of forms: allows submission on enter",
+  "main": "dist/submittable.js",
+  "scripts": {
+    "format": "prettier --write src/*.js",
+    "build": "babel src -d dist",
+    "jest": "jest",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build",
+    "test": "npm run jest"
+  },
+  "keywords": [
+    "submit",
+    "form",
+    "element",
+    "react"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "author": "Mapbox",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.16.0",
+    "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.0.0",
+    "jest": "^21.2.1",
+    "prettier": "^1.2.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "env"
+    ],
+    "plugins": [
+      "transform-class-properties"
+    ]
+  },
+  "peerDependencies": {
+    "react": "^15.5.0 || ^16.0.0",
+    "react-dom": "^15.5.0 || ^16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mapbox/react-submittable.git"
+  },
+  "jest": {
+    "clearMocks": true,
+    "setupFiles": [
+      "<rootDir>/test/test-util/jest-setup.js"
+    ]
+  }
+}

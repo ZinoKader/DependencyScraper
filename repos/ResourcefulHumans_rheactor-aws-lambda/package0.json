@@ -1,0 +1,62 @@
+{
+  "name": "@resourcefulhumans/rheactor-aws-lambda",
+  "version": "0.0.0-development",
+  "description": "Core components for RESTful AWS lambda endpoints",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
+    "test:coverage": "NODE_ENV=testing istanbul cover _mocha -- --compilers js:babel-core/register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
+    "test:coverage-travis": "NODE_ENV=testing VERSION=0.0.0 istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js && codeclimate-test-reporter < ./coverage/lcov.info && rm -rf ./coverage",
+    "lint": "standard",
+    "precommit": "npm run lint && npm test",
+    "commitmsg": "validate-commit-msg",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ResourcefulHumans/rheactor-aws-lambda.git"
+  },
+  "keywords": [
+    "simple",
+    "social",
+    "realtime"
+  ],
+  "author": "Resourceful Humans GmbH <info@resourceful-humans.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ResourcefulHumans/rheactor-aws-lambda/issues"
+  },
+  "homepage": "https://github.com/ResourcefulHumans/rheactor-aws-lambda#readme",
+  "peerDependencies": {
+    "bluebird": "^3.4.7",
+    "jsonwebtoken": "^7.2.1",
+    "rheactor-models": "3.x >=3.2.2",
+    "rheactor-value-objects": "^10.0.0",
+    "tcomb": "^3.2.16"
+  },
+  "devDependencies": {
+    "@resourcefulhumans/rheactor-errors": "1.x",
+    "babel-cli": "^6.22.2",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.4.0",
+    "husky": "^0.13.3-0",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^3.2.0",
+    "semantic-release": "^6.3.2",
+    "standard": "^10.0.0",
+    "validate-commit-msg": "^2.11.1"
+  },
+  "files": [
+    "dist",
+    "src",
+    "test",
+    "README.md"
+  ]
+}

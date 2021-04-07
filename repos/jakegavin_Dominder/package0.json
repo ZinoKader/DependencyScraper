@@ -1,0 +1,19 @@
+{
+  "name": "Dominder",
+  "version": "0.0.0",
+  "description": "A Dominion set builder",
+  "author": null,
+  "private": true,
+  "main": "main.js",
+  "dependencies": {
+    "@exponent/ex-navigation": "^1.7.0-rc-4",
+    "clamp": "^1.0.1",
+    "exponent": "^10.0.4",
+    "immutable": "^3.8.1",
+    "react": "~15.3.2",
+    "react-native": "github:exponentjs/react-native#sdk-10.1.2",
+    "react-redux": "^4.4.5",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.0"
+  }
+}

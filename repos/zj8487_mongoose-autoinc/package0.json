@@ -1,0 +1,50 @@
+{
+  "name": "mongoose-autoinc",
+  "version": "0.0.2",
+  "description": "Mongoose plugin that auto-increments any ID field on your schema forked from mongoose-auto-increment",
+  "homepage": "https://github.com/zj8487/mongoose-autoinc",
+  "author": "zj8487 <zj8487@gmail.com> (https://github.com/zj8487)",
+  "repository": {
+    "type": "git",
+    "url": "zj8487@gmail.com/mongoose-autoinc"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "mongoose-autoinc",
+    "mongoose",
+    "plugin",
+    "auto-increment",
+    "auto",
+    "increment",
+    "automatic",
+    "autoincrement",
+    "auto_increment",
+    "autoinc",
+    "auto-inc",
+    "auto_inc",
+    "mongoose-pureautoinc",
+    "pureautoinc"
+  ],
+  "dependencies": {
+    "extend": "^2.0.0"
+  },
+  "devDependencies": {
+    "async": "^0.9.0",
+    "chai": "^2.0.0",
+    "mocha": "^2.1.0",
+    "mongoose": "^3.8.23"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "bugs": {
+    "url": "https://github.com/zj8487/mongoose-autoinc/issues"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  }
+}

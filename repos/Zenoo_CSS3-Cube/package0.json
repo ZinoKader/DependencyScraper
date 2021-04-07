@@ -1,0 +1,71 @@
+{
+  "name": "css3-cube",
+  "version": "0.1.8",
+  "description": "A canvas-free, CSS3 only cube",
+  "main": "Cube.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jsdoc": "jsdoc . -R README.md -c docs/jsdoc-conf.json && git add docs && git commit -m \"chore: Docs generation\"",
+    "release": "npm run jsdoc && standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zenoo/CSS3-Cube.git"
+  },
+  "keywords": [
+    "css3",
+    "cube",
+    "animation",
+    "interactive"
+  ],
+  "author": "Zenoo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zenoo/CSS3-Cube/issues"
+  },
+  "homepage": "https://github.com/Zenoo/CSS3-Cube#readme",
+  "devDependencies": {
+    "jsdoc": "^3.6.5",
+    "standard-version": "^9.1.1"
+  },
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      },
+      {
+        "type": "docs",
+        "section": "Documentation"
+      },
+      {
+        "type": "style",
+        "section": "Visual updates"
+      },
+      {
+        "type": "refactor",
+        "section": "Refactoring"
+      },
+      {
+        "type": "perf",
+        "section": "Performance"
+      },
+      {
+        "type": "progress",
+        "section": "Progress"
+      },
+      {
+        "type": "test",
+        "section": "Tests"
+      }
+    ]
+  }
+}

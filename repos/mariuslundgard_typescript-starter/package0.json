@@ -1,0 +1,24 @@
+{
+  "name": "typescript-starter",
+  "version": "1.0.0",
+  "description": "A starter repository for TypeScript projects.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json src/*.ts src/**/*.ts",
+    "postinstall": "typings install",
+    "prebuild": "rimraf dist",
+    "test": "tape test/**/*-test.js | faucet"
+  },
+  "author": "Marius Lundgård <studio@mariuslundgard.com> (http://mariuslundgard.com/)",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "faucet": "0.0.1",
+    "rimraf": "2.5.3",
+    "tape": "4.6.0",
+    "tslint": "3.13.0",
+    "typescript": "1.8.10",
+    "typings": "1.3.1"
+  }
+}

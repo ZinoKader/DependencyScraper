@@ -1,0 +1,25 @@
+{
+  "name": "my-egg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "./scripts/bootstrap.sh",
+    "demo": "nodemon example/app.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "egg.js",
+    "node.js",
+    "framework"
+  ],
+  "author": "caiyongmin <645589265@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "~24.5.0",
+    "nodemon": "~1.18.6"
+  },
+  "dependencies": {
+    "koa-static-cache": "~5.1.2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "name": "understanding-typescript",
+    "version": "1.0.0",
+    "description": "Understanding TypeScript Course Setup",
+    "main": "dist/app.js",
+    "module": "dist/app.es.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "lite-server",
+        "build": "rimraf dist/* && rollup -c",
+        "watch": "rollup -c rollup.config.js -w "
+    },
+    "keywords": [
+        "typescript",
+        "course"
+    ],
+    "author": "Maximilian Schwarzmüller",
+    "license": "ISC",
+    "devDependencies": {
+        "lite-server": "^2.5.4",
+        "rollup": "^2.26.10",
+        "rollup-plugin-typescript2": "^0.27.2",
+        "typescript": "^4.0.2"
+    },
+    "dependencies": {
+        "rxjs": "^6.6.3"
+    }
+}

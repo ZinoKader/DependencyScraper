@@ -1,0 +1,33 @@
+{
+  "name": "weishop",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "DEBUG=http node-dev dispatch.js",
+    "test": "mocha  --require should --globals hasCert --ignore-leaks --reporter dot --bail --timeout 30000 test/*.js",
+    "jshint": "jshint ."
+  },
+  "author": [
+  ],
+  "dependencies": {
+    "express": "4.4.1",
+    "moment": "2.8.1",
+    "cookie-parser": "1.3.1",
+    "request": "2.36.0",
+    "nunjucks": "1.0.5",
+    "body-parser": "1.6.1",
+    "connect-busboy": "0.0.1",
+    "express-session": "1.7.4",
+    "connect-flash": "0.1.1",
+    "mongoose": "3.9.0",
+    "wechat": "0.8.9",
+    "fileutil": "1.1.1",
+    "mini-logger": "0.3.0",
+    "pomelo-monitor": "0.3.7"
+  },
+  "devDependencies": {
+    "jshint": "2.5.1",
+    "mocha": "1.17.1",
+    "node-dev": "2.1.4",
+    "should": "3.1.2"
+  }
+}

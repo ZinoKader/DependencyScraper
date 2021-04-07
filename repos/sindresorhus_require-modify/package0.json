@@ -1,0 +1,42 @@
+{
+  "name": "import-modify",
+  "version": "3.0.0",
+  "description": "Modify the source of an imported module",
+  "license": "MIT",
+  "repository": "sindresorhus/import-modify",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "import",
+    "require",
+    "modify",
+    "transform",
+    "source",
+    "src",
+    "module",
+    "inject",
+    "mocking",
+    "mocks",
+    "stubs",
+    "testing"
+  ],
+  "dependencies": {
+    "sandboxed-module": "^2.0.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "xo": "*"
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "name" : "jape",
+    "version" : "0.0.3",
+    "description" : "Jape is a simple way to convert a JSON object to a single URI Encoded string.",
+    "main":"index.js",
+    "scripts" : {
+        "test" : "mocha test/test.js"
+    },
+    "repository" : "https://github.com/matthewpalmer/jape.git",
+    "author":"Matthew Palmer",
+    "license":"BSD",
+    "devDependencies" : {
+        "mocha" : "*",
+        "expect.js" : "*"
+    },
+    "keywords" : [
+        "jape",
+        "json",
+        "json to string",
+        "URI encode json"
+
+    ]
+}

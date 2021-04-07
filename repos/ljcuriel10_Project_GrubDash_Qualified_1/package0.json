@@ -1,0 +1,37 @@
+{
+  "name": "zid-be-project-grub-dash-01-qualified",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkful-Ed/web-dev-programs",
+    "directory": "/library/zid-be-robust-server-structure-XX-assignment/solution"
+  },
+  "main": "src/server.js",
+  "scripts": {
+    "build": "echo build done",
+    "docker:build": "cross-conf-env docker image build . -t thinkful-ed/$npm_package_name",
+    "docker:run": "cross-conf-env docker run --rm -p 5000:5000 thinkful-ed/$npm_package_name",
+    "docker:stop": "docker stop $(docker ps -q)",
+    "docker:test": "cross-conf-env docker run -it thinkful-ed/$npm_package_name npm test",
+    "dev": "nodemon src/server.js",
+    "start": "npm run dev",
+    "start:solution": "npm run docker:build && npm run docker:run",
+    "test": "jest",
+    "test:solution": "npm run docker:build && npm run docker:test",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-conf-env": "^1.2.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.7",
+    "supertest": "^5.0.0"
+  }
+}

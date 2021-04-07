@@ -1,0 +1,25 @@
+{
+  "name": "easylights",
+  "version": "0.0.2",
+  "description": "HTML/JS interface for showmaster",
+  "author": "Richard Bronkhorst",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richmans/showmaster.git"
+  },
+  "devDependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-scripts": "0.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "socket.io-client": "^1.6.0"
+  }
+}

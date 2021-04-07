@@ -1,0 +1,33 @@
+{
+  "name": "showmaster",
+  "version": "0.0.2",
+  "description": "Processor for realtime events in lights and music.",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "bin": {
+    "showmaster": "./index.js"
+  },
+  "keywords": [
+    "realtime",
+    "dmx"
+  ],
+  "author": "Richard Bronkhorst",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "express-http-proxy": "^0.10.1",
+    "midi": "^0.9.5",
+    "socket.io": "^1.3.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richmans/showmaster.git"
+  },
+  "devDependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-scripts": "0.7.0"
+  }
+}

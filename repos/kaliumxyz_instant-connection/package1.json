@@ -1,0 +1,25 @@
+{
+  "name": "instant-connection",
+  "version": "0.5.0",
+  "description": "A simple connection lib for instant.",
+  "main": "index.js",
+  "repository": "https://github.com/kaliumxyz/instant-connection",
+  "author": "kalium",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "isomorphic-ws": "^4.0.1",
+    "ws": "^3.0.0"
+  },
+  "devDependencies": {
+    "ava": "^2.1.0"
+  },
+  "keywords": [
+    "instant",
+    "websocket",
+    "magic"
+  ],
+  "scripts": {
+    "test": "ava"
+  }
+}
