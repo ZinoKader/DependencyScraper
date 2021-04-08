@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -16,7 +17,13 @@ func GetRepositoryFileRows() []model.RepositoryFileRow {
 	}
 	defer repoFile.Close()
 
-	csvLines, err := csv.NewReader(repoFile).ReadAll()
+	csvReader := csv.NewReader(repoFile)
+
+	if _, err := csvReader.Read(); err != nil {
+		log.Fatalln("Error skipping first row of repository file", err)
+	}
+
+	csvLines, err := csvReader.ReadAll()
 	if err != nil {
 		fmt.Println("Could not read repository file lines", err)
 	}

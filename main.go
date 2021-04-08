@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"runtime"
 	"strings"
 	"sync"
@@ -13,7 +12,7 @@ import (
 
 var SLICES = runtime.NumCPU()
 
-func mapPackageFiles(repos []model.RepositoryFileRow, accumulator <-chan []model.DependencyTree) {
+func mapPackageFiles(repos []model.RepositoryFileRow, accumulator chan<- []model.DependencyTree) {
 	partSize := len(repos) / SLICES
 	var wg sync.WaitGroup
 	for i := 0; i < len(repos); i += partSize {
@@ -26,7 +25,6 @@ func mapPackageFiles(repos []model.RepositoryFileRow, accumulator <-chan []model
 		}
 
 		wg.Add(1)
-
 		go func(rows []model.RepositoryFileRow, task *sync.WaitGroup) {
 			for _, row := range rows {
 				URLParts := strings.Split(row.URL, "/")
@@ -37,6 +35,9 @@ func mapPackageFiles(repos []model.RepositoryFileRow, accumulator <-chan []model
 			task.Done()
 		}(reposPart, &wg)
 	}
+
+	wg.Wait()
+	close(accumulator)
 }
 
 func main() {
@@ -46,7 +47,10 @@ func main() {
 	repoRows := data.GetRepositoryFileRows()
 	packageFileAccumulator := make(chan []model.DependencyTree)
 
+	var wg sync.WaitGroup
+
+	wg.Add(1)
 	go mapPackageFiles(repoRows, packageFileAccumulator)
 
-	fmt.Println(repoRows)
+	wg.Wait()
 }
