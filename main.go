@@ -27,23 +27,22 @@ func mapPackageFiles(repos []model.RepositoryFileRow, accumulator chan<- model.D
 		}
 
 		wg.Add(1)
-		go func(rows []model.RepositoryFileRow, task *sync.WaitGroup) {
-			for _, row := range rows {
+		go func() {
+			for _, row := range reposPart {
 				URLParts := strings.Split(row.URL, "/")
 				ownerName := URLParts[len(URLParts)-2]
 				repoName := row.Name
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
 				dependencyTree.ID = row.ID
 				if err != nil {
-					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s \n %v", row.URL, err)
+					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s \n%v", row.URL, err)
 					continue
 				}
 				// push parsed dependency tree to accumulator
-				fmt.Println(dependencyTree.ID)
 				accumulator <- dependencyTree
 			}
-			task.Done()
-		}(reposPart, &wg)
+			wg.Done()
+		}()
 	}
 
 	wg.Wait()
@@ -68,10 +67,20 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	wg.Add(1)
 	// map repo urls to dependency contents (dependencies and devDependencies)
 	go mapPackageFiles(repoRows, packageFileAccumulator)
 
+	wg.Add(1)
+	go func() {
+		for {
+			v, ok := <-packageFileAccumulator
+			if !ok {
+				break
+			}
+			fmt.Printf("bla: %v\n", v)
+		}
+		wg.Done()
+	}()
 	// map dependencies and devDependencies to trees of
 
 	// reduce/accumulate results into file (reduce to csv where id is parent repo ID and one row for every dependency where the dependency is the GitHub URL)
