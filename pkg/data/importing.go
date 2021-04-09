@@ -11,7 +11,7 @@ import (
 )
 
 func GetRepositoryFileRows() []model.RepositoryFileRow {
-	repoFile, err := os.Open("test.csv")
+	repoFile, err := os.Open("../../small_test.csv")
 	if err != nil {
 		fmt.Println("Could not open repository file", err)
 	}
