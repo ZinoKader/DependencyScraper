@@ -45,10 +45,12 @@ func repoDependencies (dependencies []string) []string {
 		results := gjson.GetManyBytes(bodyBytes, "collected.metadata.links.repository","collected.metadata.repository.url")
 
 		var result string
-		if len(results[0].String()) < 0 {
+		if len(results[0].String()) > 0 {
 			result = strings.Replace(results[0].String(), "github", "api.github", 1)
-		} else if len(results[1].String()) > 0 {
+
+		} else if len(results[1].String()) > 0 && strings.Contains(results[1].String(),"https") {
 			result = strings.TrimSuffix(strings.Replace(results[1].String(), "git+https://github","https://api.github", 1), ".git")
+
 		} else {
 			continue
 		}
