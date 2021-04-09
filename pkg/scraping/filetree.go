@@ -34,8 +34,8 @@ func ExtractRepoFileTree(ownerName string, repoName string) {
 		return strings.Contains(href, "/find/")
 	}).First().Attr("href")
 
-	repoFileFinderURLParts := strings.Split(repoFileFinderURL, "/")
-	repoMainBranchName := repoFileFinderURLParts[len(repoFileFinderURLParts)-1]
+	//repoFileFinderURLParts := strings.Split(repoFileFinderURL, "/")
+	//repoMainBranchName := repoFileFinderURLParts[len(repoFileFinderURLParts)-1]
 
 	// visit file finder page for repo and find the URL for the filetree
 	res, err = http.Get(repoFileFinderURL)
