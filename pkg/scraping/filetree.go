@@ -15,7 +15,7 @@ type GithubFileTree struct {
 	Paths []string `json:"paths"`
 }
 
-func ExtractRepoFileTree(ownerName string, repoName string) {
+func ExtractRepoFileTree(ownerName string, repoName string) []string {
 	// visit main repo page and extract main branch name and file finder URL
 	ghURL := strings.Join([]string{"https://github.com", ownerName, repoName}, "/")
 	res, err := http.Get(ghURL)
@@ -80,5 +80,5 @@ func ExtractRepoFileTree(ownerName string, repoName string) {
 			packageFileURLs = append(packageFileURLs, packageFileURL)
 		}
 	}
-	fmt.Println(packageFileURLs)
+	return packageFileURLs
 }
