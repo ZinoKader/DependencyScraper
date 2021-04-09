@@ -34,10 +34,11 @@ func ExtractRepoFileTree(ownerName string, repoName string) {
 		return strings.Contains(href, "/find/")
 	}).First().Attr("href")
 
-	//repoFileFinderURLParts := strings.Split(repoFileFinderURL, "/")
-	//repoMainBranchName := repoFileFinderURLParts[len(repoFileFinderURLParts)-1]
-
+	repoFileFinderURLParts := strings.Split(repoFileFinderURL, "/")
+	repoMainBranchName := repoFileFinderURLParts[len(repoFileFinderURLParts)-1]
+	
 	// visit file finder page for repo and find the URL for the filetree
+	repoFileFinderURL = fmt.Sprintf("https://github.com%s",repoFileFinderURL)
 	res, err = http.Get(repoFileFinderURL)
 	if err != nil {
 		fmt.Printf("Could not fetch file finder page of %v\n %v", repoFileFinderURL, err)
@@ -50,6 +51,7 @@ func ExtractRepoFileTree(ownerName string, repoName string) {
 	}
 
 	repoFileTreeURL, _ := doc.Find("fuzzy-list").First().Attr("data-url")
+	repoFileTreeURL = fmt.Sprintf("https://github.com%s",repoFileTreeURL)
 
 	// visit the file tree for the repo and extract the paths to the package.json files
 	var packageFileURLs []string
@@ -74,8 +76,9 @@ func ExtractRepoFileTree(ownerName string, repoName string) {
 	json.Unmarshal(fileTreeBody, &fileTree)
 	for _, path := range fileTree.Paths {
 		if strings.Contains(path, "package.json") && !strings.Contains(path, "node_modules") {
-			packageFileURLs = append(packageFileURLs, path)
+			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s",ownerName,repoName,repoMainBranchName,path)
+			packageFileURLs = append(packageFileURLs, packageFileURL)
 		}
 	}
-
+	fmt.Println(packageFileURLs)
 }
