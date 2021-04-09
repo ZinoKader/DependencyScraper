@@ -77,7 +77,7 @@ func main() {
 			if !ok {
 				break
 			}
-			fmt.Printf("bla: %v\n", v)
+			fmt.Printf("%v\n", v)
 		}
 		wg.Done()
 	}()

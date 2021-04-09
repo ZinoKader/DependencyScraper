@@ -72,6 +72,12 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 		fmt.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
 		return model.DependencyTree{}, err
 	}
+
+	if res.StatusCode != 200 {
+		fmt.Printf("Failed request for %s, status code %v\n", repoFileTreeURL, res.Status)
+	} else {
+		fmt.Println(res.Status)
+	}
 	defer res.Body.Close()
 
 	fileTreeBody, err := ioutil.ReadAll(res.Body)
@@ -106,6 +112,10 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 			}
 			dependencyTree.Dependencies = append(dependencyTree.Dependencies, dependencies...)
 		}
+	}
+
+	if len(dependencyTree.Dependencies) == 0 {
+		fmt.Printf("Empty repo %s \n", repoFileTreeURL)
 	}
 
 	return *dependencyTree, nil
