@@ -10,8 +10,8 @@ import (
 	model "github.com/ZinoKader/KEX/model"
 )
 
-func GetRepositoryFileRows() []model.RepositoryFileRow {
-	repoFile, err := os.Open("../../small_test.csv")
+func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
+	repoFile, err := os.Open(inputFile)
 	if err != nil {
 		fmt.Println("Could not open repository file", err)
 	}

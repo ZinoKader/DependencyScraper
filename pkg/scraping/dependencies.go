@@ -11,9 +11,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-var dependencyCache = cache.New(cache.NoExpiration, 0)
-
-func repoDependencies(dependencies []string) []string {
+func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []string {
 
 	var repoUrls = []string{}
 	for _, dependency := range dependencies {

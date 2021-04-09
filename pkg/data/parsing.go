@@ -3,33 +3,41 @@ package data
 import (
 	"encoding/json"
 	"strings"
+
+	mapset "github.com/deckarep/golang-set"
 )
 
-func ParsePackage(packageJson string) (map[string]bool, error) {
-	dependencyCollector := make(map[string]bool)
-	packageData := []byte(packageJson)
+func ParsePackage(packageData []byte) ([]string, error) {
+	dependencyCollector := mapset.NewSet()
 
 	var v interface{}
 	err := json.Unmarshal(packageData, &v)
 	if err != nil {
-		return dependencyCollector, err
+		return []string{}, err
 	}
 	data := v.(map[string]interface{})
 
 	devDependencies, found := data["devDependencies"]
 	if found {
-		for dependecy := range devDependencies.(map[string]interface{}) {
+		for dependency := range devDependencies.(map[string]interface{}) {
 			// replace @  and / with hexadecimal counterparts
-			formated := strings.ReplaceAll(strings.ReplaceAll(dependecy, "@", "%40"), "/", "%2f")
-			dependencyCollector[formated] = true
+			formatted := strings.ReplaceAll(strings.ReplaceAll(dependency, "@", "%40"), "/", "%2f")
+			dependencyCollector.Add(formatted)
 		}
 	}
+
 	dependencies, found := data["dependencies"]
 	if found {
-		for dependecy := range dependencies.(map[string]interface{}) {
-			formated := strings.ReplaceAll(strings.ReplaceAll(dependecy, "@", "%40"), "/", "%2f")
-			dependencyCollector[formated] = true
+		for dependency := range dependencies.(map[string]interface{}) {
+			formatted := strings.ReplaceAll(strings.ReplaceAll(dependency, "@", "%40"), "/", "%2f")
+			dependencyCollector.Add(formatted)
 		}
 	}
-	return dependencyCollector, nil
+
+	res := []string{}
+	for _, dependency := range dependencyCollector.ToSlice() {
+		res = append(res, dependency.(string))
+	}
+
+	return res, nil
 }

@@ -1,6 +1,6 @@
 package model
 
 type DependencyTree struct {
-	Repository   string
+	ID           int
 	Dependencies []string
 }
