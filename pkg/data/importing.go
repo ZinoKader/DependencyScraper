@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bufio"
 	"encoding/csv"
 	"fmt"
 	"log"
@@ -46,4 +47,20 @@ func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
 	}
 
 	return repoFileRows
+}
+
+func ProxyList() []string {
+	proxyFile, err := os.Open("proxies.txt")
+	if err != nil {
+		log.Panicln("Could not open proxy server file", err)
+	}
+	defer proxyFile.Close()
+
+	scanner := bufio.NewScanner(proxyFile)
+	var proxies []string
+	for scanner.Scan() {
+		proxies = append(proxies, scanner.Text())
+	}
+
+	return proxies
 }

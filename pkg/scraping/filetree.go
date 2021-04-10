@@ -19,6 +19,8 @@ type GithubFileTree struct {
 	Paths []string `json:"paths"`
 }
 
+var PROXIES = data.ProxyList()
+
 func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree, error) {
 
 	rand.Seed(time.Now().Unix())
@@ -130,13 +132,6 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	return *dependencyTree, nil
 }
 
-var proxies = []string{
-	"165.225.77.46:8800",
-	"165.225.77.47:9443",
-	"54.36.15.34:3128",
-	"165.225.77.46:443",
-}
-
 func randomProxy() string {
-	return proxies[rand.Intn(len(proxies))]
+	return PROXIES[rand.Intn(len(PROXIES))]
 }
