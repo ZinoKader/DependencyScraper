@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"runtime"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/ZinoKader/KEX/model"
 	"github.com/ZinoKader/KEX/pkg/data"
@@ -49,27 +51,30 @@ func mapPackageFiles(repos []model.RepositoryFileRow, accumulator chan<- model.D
 	close(accumulator)
 }
 
+func setup() {
+	// init psuedorandom seed with nano time
+	rand.Seed(time.Now().UnixNano())
+	// ensure all CPUs are used
+	runtime.GOMAXPROCS(runtime.NumCPU())
+}
+
 func main() {
+	// read input file and output file
 	if len(os.Args) != 3 {
 		fmt.Println("Usage: ", os.Args[0], "{input file path} [csv]", "{output file path} [csv]")
 		return
 	}
-
 	inputPath := os.Args[1]
 	//outputPath := os.Args[2]
-
-	// command line arguments to function
-	// ensure all CPUs used
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
 	repoRows := data.RepositoryFileRows(inputPath)
 	packageFileAccumulator := make(chan model.DependencyTree)
 
-	var wg sync.WaitGroup
+	setup()
 
 	// map repo urls to dependency contents (dependencies and devDependencies)
 	go mapPackageFiles(repoRows, packageFileAccumulator)
 
+	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
 		for {
@@ -81,6 +86,7 @@ func main() {
 		}
 		wg.Done()
 	}()
+
 	// map dependencies and devDependencies to trees of
 
 	// reduce/accumulate results into file (reduce to csv where id is parent repo ID and one row for every dependency where the dependency is the GitHub URL)

@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ZinoKader/KEX/model"
@@ -22,8 +21,6 @@ type GithubFileTree struct {
 var PROXIES = data.ProxyList()
 
 func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree, error) {
-
-	rand.Seed(time.Now().Unix())
 
 	// try setting proxy
 	proxyUrl, _ := url.Parse(fmt.Sprintf("http://%s", randomProxy()))
