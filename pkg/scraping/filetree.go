@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
+	"net/url"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ZinoKader/KEX/model"
@@ -17,6 +20,13 @@ type GithubFileTree struct {
 }
 
 func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree, error) {
+
+	rand.Seed(time.Now().Unix())
+
+	// try setting proxy
+	proxyUrl, _ := url.Parse(fmt.Sprintf("http://%s", randomProxy()))
+	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
+
 	// visit main repo page and extract main branch name and file finder URL
 	ghURL := strings.Join([]string{"https://github.com", ownerName, repoName}, "/")
 	res, err := http.Get(ghURL)
@@ -74,9 +84,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	}
 
 	if res.StatusCode != 200 {
-		fmt.Printf("Failed request for %s, status code %v\n", repoFileTreeURL, res.Status)
-	} else {
-		fmt.Println(res.Status)
+		fmt.Printf("Failed request for %s, status code %v, proxy %v\n", repoFileTreeURL, res.Status, proxyUrl)
 	}
 	defer res.Body.Close()
 
@@ -92,6 +100,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// fetch and read raw package.json files
 	for _, path := range fileTree.Paths {
 		if strings.Contains(path, "package.json") && !strings.Contains(path, "node_modules") {
+
 			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s", ownerName, repoName, repoMainBranchName, path)
 			res, err := http.Get(packageFileURL)
 			if err != nil {
@@ -119,4 +128,15 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	}
 
 	return *dependencyTree, nil
+}
+
+var proxies = []string{
+	"165.225.77.46:8800",
+	"165.225.77.47:9443",
+	"54.36.15.34:3128",
+	"165.225.77.46:443",
+}
+
+func randomProxy() string {
+	return proxies[rand.Intn(len(proxies))]
 }
