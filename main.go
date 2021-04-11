@@ -37,7 +37,19 @@ func mapPackageFiles(repos []model.RepositoryFileRow, accumulator chan<- model.D
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
 				dependencyTree.ID = row.ID
 				if err != nil {
-					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s \n%v", row.URL, err)
+					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
+					switch err.(type) {
+					case *model.ConnectionError:
+						// handle marking this repo as "retry"
+						// connectionError := err.(*model.ConnectionError)
+					case *model.RepoNoPackage:
+						// handle marking this repo as "do-not-retry"
+						// noPackageError := err.(*model.RepoNoPackage)
+					case *model.RepoNotExist:
+						// handle marking this repo as "do-not-retry"
+						// notExistError := err.(*model.RepoNotExist)
+					default:
+					}
 					continue
 				}
 				// push parsed dependency tree to accumulator
@@ -82,7 +94,7 @@ func main() {
 			if !ok {
 				break
 			}
-			fmt.Printf("%v\n", v)
+			fmt.Printf("%v\n\n", v)
 		}
 		wg.Done()
 	}()
