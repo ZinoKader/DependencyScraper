@@ -30,11 +30,11 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	if err != nil {
 		return model.DependencyTree{}, err
 	}
-	
+
 	repoPageResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch github page of %v\n%v", ghURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer repoPageResponse.Body.Close()
 
@@ -65,10 +65,11 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	if err != nil {
 		return model.DependencyTree{}, err
 	}
+
 	repoFileFinderResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file finder page of %v\n%v", repoFileFinderURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer repoFileFinderResponse.Body.Close()
 
@@ -85,7 +86,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	req, err = CreateRequest(repoFileTreeURL)
 	if err != nil {
 		fmt.Println("Could not create new request for file tree page", err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	// this header is needed to trick GitHub into thinking the request was made from the client
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
@@ -93,7 +94,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	fileTreeResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer fileTreeResponse.Body.Close()
 
@@ -114,7 +115,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s", ownerName, repoName, repoMainBranchName, path)
 			req, err := CreateRequest(packageFileURL)
 			if err != nil {
-						return model.DependencyTree{}, err
+				return model.DependencyTree{}, err
 			}
 
 			rawResponse, err := httpClient.Do(req)

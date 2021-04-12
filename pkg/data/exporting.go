@@ -7,7 +7,12 @@ import (
 	"strings"
 )
 
-var EXPORTING_BASE_PATH = "out"
+func fileExists(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	}
+	return false
+}
 
 func WriteToFile(file string, content []byte) error {
 	finalFilePath := file
@@ -46,9 +51,14 @@ func WriteToFile(file string, content []byte) error {
 	return nil
 }
 
-func fileExists(file string) bool {
-	if _, err := os.Stat(file); err == nil {
-		return true
+func AppendToFile(file string, content string) error {
+	f, err := os.OpenFile(file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
 	}
-	return false
+	defer f.Close()
+	if _, err := f.WriteString(fmt.Sprintf("%s\n", content)); err != nil {
+		return err
+	}
+	return nil
 }
