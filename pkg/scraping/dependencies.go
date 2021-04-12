@@ -15,15 +15,15 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 	var repoURLs = []string{}
 	for _, dependency := range dependencies {
 
-		URL := fmt.Sprintf("https://api.npms.io/v2/package/%s", dependency)
 
-		cachedURL, found := dependencyCache.Get(URL)
+		cachedURL, found := dependencyCache.Get(dependency)
 
 		if found {
 			repoURLs = append(repoURLs, cachedURL.(string))
 			continue
 		}
 
+		URL := fmt.Sprintf("https://api.npms.io/v2/package/%s", dependency)
 		req, err := CreateRequest(URL)
 		if err != nil {
 			log.Println(err)
