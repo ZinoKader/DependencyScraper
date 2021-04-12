@@ -13,6 +13,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ZinoKader/KEX/model"
 	"github.com/ZinoKader/KEX/pkg/data"
+	"github.com/deckarep/golang-set"
 )
 
 type GithubFileTree struct {
@@ -104,6 +105,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	var dependencyTree = new(model.DependencyTree)
 	var fileTree = new(GithubFileTree)
 	json.Unmarshal(fileTreeBody, &fileTree)
+	dependencyCollector := mapset.NewSet()
 
 	// fetch and read raw package.json files
 	for _, path := range fileTree.Paths {
@@ -127,7 +129,13 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 				fmt.Printf("Could not parse package.json for %v\n%v", packageFileURL, err)
 				continue
 			}
-			dependencyTree.Dependencies = append(dependencyTree.Dependencies, dependencies...)
+
+			for _, dependency := range dependencies {
+				dependencyCollector.Add(dependency)
+			}
+		}
+		for _, dependency := range dependencyCollector.ToSlice() {
+			dependencyTree.Dependencies = append(dependencyTree.Dependencies, dependency.(string))
 		}
 	}
 

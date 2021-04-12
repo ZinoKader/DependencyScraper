@@ -22,7 +22,6 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 
 		if found {
 			repoURLs = append(repoURLs, cachedURL.(string))
-			fmt.Println(cachedURL.(string))
 			continue
 		}
 

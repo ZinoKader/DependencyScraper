@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
 	"math/rand"
 	"os"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -75,7 +78,6 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 		wg.Add(1)
 		go func() {
 			for tree := range treeAccumulator {
-				fmt.Println(dependencyCache.Items())
 				dependencyURLs := scraping.RepoDependencies(tree.Dependencies, dependencyCache)
 				edges := model.PackageEdges{
 					ID:             tree.ID,
@@ -88,6 +90,19 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 	}
 	wg.Wait()
 	close(edgeAccumulator)
+}
+
+func reduceToFile(edgeAccumulator <-chan model.PackageEdges, outputPath string) {
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+	defer writer.Flush()
+
+	for node := range edgeAccumulator {
+		for _, edge := range node.DependencyURLs {
+			writer.Write([]string{strconv.Itoa(node.ID), edge})
+		}
+	}
+	data.WriteToFile(outputPath, buf.Bytes())
 }
 
 func setup() {
@@ -104,7 +119,7 @@ func main() {
 		return
 	}
 	inputPath := os.Args[1]
-	//outputPath := os.Args[2]
+	outputPath := os.Args[2]
 	repoRows := data.RepositoryFileRows(inputPath)
 
 	dependencyCache := getCache()
@@ -116,6 +131,7 @@ func main() {
 
 	go mapPackageFiles(repoRows, treeAccumulator)
 	go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
+	reduceToFile(edgeAccumulator, outputPath)
 
 	// map dependencies and devDependencies to trees of
 
