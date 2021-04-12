@@ -15,16 +15,21 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 	var repoURLs = []string{}
 	for _, dependency := range dependencies {
 
-		url := fmt.Sprintf("https://api.npms.io/v2/package/%s", dependency)
+		URL := fmt.Sprintf("https://api.npms.io/v2/package/%s", dependency)
 
-		cachedURL, found := dependencyCache.Get(url)
+		cachedURL, found := dependencyCache.Get(URL)
 
 		if found {
 			repoURLs = append(repoURLs, cachedURL.(string))
 			continue
 		}
 
-		response, err := httpClient.Get(url)
+		req, err := CreateRequest(URL)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		response, err := httpClient.Do(req)
 
 		if err != nil {
 			log.Println(err)
@@ -43,8 +48,10 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 		var repoURL string
 		if len(results[0].String()) > 0 {
 			repoURL = strings.Replace(results[0].String(), "github", "api.github", 1)
+
 		} else if len(results[1].String()) > 0 && strings.Contains(results[1].String(), "https") {
 			repoURL = strings.TrimSuffix(strings.Replace(results[1].String(), "git+https://github", "https://api.github", 1), ".git")
+
 		} else {
 			continue
 		}

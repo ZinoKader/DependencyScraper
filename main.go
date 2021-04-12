@@ -33,7 +33,7 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 		}
 
 		wg.Add(1)
-		go func(wg *sync.WaitGroup, treeAccumulator chan<- model.DependencyTree, reposPart []model.RepositoryFileRow ) {
+		go func(wg *sync.WaitGroup, treeAccumulator chan<- model.DependencyTree, reposPart []model.RepositoryFileRow) {
 			defer wg.Done()
 			for _, row := range reposPart {
 				URLParts := strings.Split(row.URL, "/")
@@ -42,32 +42,41 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
 				if err != nil {
 					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
-					continue
-					/*
-						switch err.(type) {
-						case *model.ConnectionError:
-							// handle marking this repo as "retry"
-							// connectionError := err.(*model.ConnectionError)
-							continue
-						case *model.RepoNoPackage:
-							// handle marking this repo as "do-not-retry"
-							// noPackageError := err.(*model.RepoNoPackage)
-							continue
-						case *model.RepoNotExist:
-							// handle marking this repo as "do-not-retry"
-							// notExistError := err.(*model.RepoNotExist)
-							continue
-						default:
-							continue
+					switch err.(type) {
+					case *model.ConnectionError:
+						// handle marking this repo as "retry"
+						connectionError := err.(*model.ConnectionError)
+						e := data.AppendToFile("retry.txt", connectionError.RepositoryURL)
+						if e != nil {
+							fmt.Printf("Failed adding repository %s to retry list", connectionError.RepositoryURL)
 						}
-					*/
+						continue
+					case *model.RepoNoPackage:
+						// handle marking this repo as "do-not-retry"
+						noPackageError := err.(*model.RepoNoPackage)
+						e := data.AppendToFile("no-retry.txt", noPackageError.RepositoryURL)
+						if e != nil {
+							fmt.Printf("Failed adding repository %s to do-not-retry list", noPackageError.RepositoryURL)
+						}
+						continue
+					case *model.RepoNotExist:
+						// handle marking this repo as "do-not-retry"
+						notExistError := err.(*model.RepoNotExist)
+						e := data.AppendToFile("no-retry.txt", notExistError.RepositoryURL)
+						if e != nil {
+							fmt.Printf("Failed adding repository %s to do-not-retry list", notExistError.RepositoryURL)
+						}
+						continue
+					default:
+						continue
+					}
 				} else {
 					dependencyTree.ID = row.ID
 					// push parsed dependency tree to accumulator
 					treeAccumulator <- dependencyTree
 				}
 			}
-		}(&wg, treeAccumulator,reposPart)
+		}(&wg, treeAccumulator, reposPart)
 	}
 	wg.Wait()
 	close(treeAccumulator)
@@ -83,7 +92,7 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 	threads := SLICES / 2
 	for i := 0; i < threads; i++ {
 		wg.Add(1)
-		go func(wg *sync.WaitGroup, treeActreeAccumulator <- chan model.DependencyTree, ededgeAccumulator chan<- model.PackageEdges) {
+		go func(wg *sync.WaitGroup, treeActreeAccumulator <-chan model.DependencyTree, ededgeAccumulator chan<- model.PackageEdges) {
 			defer wg.Done()
 			for tree := range treeAccumulator {
 				dependencyURLs := scraping.RepoDependencies(tree.Dependencies, dependencyCache)
