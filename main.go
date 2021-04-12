@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"os"
 	"runtime"
@@ -88,11 +89,13 @@ func getCache() *cache.Cache {
 	//TODO: Read map from file
 	file, err := os.Open("cache.json")
 	if err != nil {
+		log.Println("Error: No saved cache file, initialize empty cache")
 		return cache.New(cache.NoExpiration, 0)
 	}
 
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
+		log.Println("Error: Could not read cache file, initialize empty cache")
 		return cache.New(cache.NoExpiration, 0)
 	}
 
@@ -100,6 +103,7 @@ func getCache() *cache.Cache {
 
 	err = json.Unmarshal(data, &cacheMap)
 	if err != nil {
+		log.Println("Error: Could not Unmarshal cache file, initialize empty cache")
 		return cache.New(cache.NoExpiration, 0)
 	}
 	return cache.NewFrom(cache.NoExpiration, 0, cacheMap)

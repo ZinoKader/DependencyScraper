@@ -1,9 +1,0 @@
-{
-  "name": "mediaSourceTutorial",
-  "version": "0.0.1",
-  "dependencies": {
-    "ejs": "^2.5.5",
-    "express": "3.11.0",
-    "request": "~2.68.0"
-  }
-}
