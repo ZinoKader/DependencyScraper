@@ -26,20 +26,19 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// visit main repo page and extract main branch name and file finder URL
 	ghURL := strings.Join([]string{"https://github.com", ownerName, repoName}, "/")
 
-	req, err := http.NewRequest("GET", ghURL, nil)
+	req, err := CreateRequest(ghURL)
 	if err != nil {
 		return model.DependencyTree{}, err
 	}
-	req.Close = true
-
-	res1, err := httpClient.Do(req)
+	
+	repoPageResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch github page of %v\n%v", ghURL, err)
 		return model.DependencyTree{}, err
 	}
-	defer res1.Body.Close()
+	defer repoPageResponse.Body.Close()
 
-	doc, err := goquery.NewDocumentFromReader(res1.Body)
+	doc, err := goquery.NewDocumentFromReader(repoPageResponse.Body)
 	if err != nil {
 		fmt.Printf("Could not parse HTML of %v\n %v", ghURL, err)
 		return model.DependencyTree{}, err
@@ -62,19 +61,18 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 	// visit file finder page for repo and find the URL for the filetree
 	repoFileFinderURL = fmt.Sprintf("https://github.com%s", repoFileFinderURL)
-	req, err = http.NewRequest("GET", repoFileFinderURL, nil)
-		if err != nil {
-			return model.DependencyTree{}, err
-		}
-	req.Close = true
-	res2, err := httpClient.Do(req)
+	req, err = CreateRequest(repoFileFinderURL)
+	if err != nil {
+		return model.DependencyTree{}, err
+	}
+	repoFileFinderResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file finder page of %v\n%v", repoFileFinderURL, err)
 		return model.DependencyTree{}, err
 	}
-	defer res2.Body.Close()
+	defer repoFileFinderResponse.Body.Close()
 
-	doc, err = goquery.NewDocumentFromReader(res2.Body)
+	doc, err = goquery.NewDocumentFromReader(repoFileFinderResponse.Body)
 	if err != nil {
 		fmt.Println("Could not init goquery for file finder page", err)
 		return model.DependencyTree{}, err
@@ -84,8 +82,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	repoFileTreeURL = fmt.Sprintf("https://github.com%s", repoFileTreeURL)
 
 	// visit the file tree for the repo and extract the paths to the package.json files
-	req, err = http.NewRequest("GET", repoFileTreeURL, nil)
-	req.Close = true
+	req, err = CreateRequest(repoFileTreeURL)
 	if err != nil {
 		fmt.Println("Could not create new request for file tree page", err)
 		return model.DependencyTree{}, err
@@ -93,14 +90,14 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// this header is needed to trick GitHub into thinking the request was made from the client
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 
-	res3, err := httpClient.Do(req)
+	fileTreeResponse, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
 		return model.DependencyTree{}, err
 	}
-	defer res3.Body.Close()
+	defer fileTreeResponse.Body.Close()
 
-	fileTreeBody, err := ioutil.ReadAll(res3.Body)
+	fileTreeBody, err := ioutil.ReadAll(fileTreeResponse.Body)
 	if err != nil {
 		fmt.Printf("Could not read body of tree page for %v\n%v", repoFileTreeURL, err)
 		return model.DependencyTree{}, err
@@ -115,19 +112,19 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	for _, path := range fileTree.Paths {
 		if strings.Contains(path, "package.json") && !strings.Contains(path, "node_modules") {
 			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s", ownerName, repoName, repoMainBranchName, path)
-			req, err := http.NewRequest("GET", packageFileURL, nil)
+			req, err := CreateRequest(packageFileURL)
 			if err != nil {
 						return model.DependencyTree{}, err
 			}
-			req.Close = true
-			res, err := httpClient.Do(req)
+
+			rawResponse, err := httpClient.Do(req)
 			if err != nil {
 				fmt.Printf("Could not fetch raw dependency for %v\n%v", packageFileURL, err)
 				continue // do our best effort, if this particular file did not work, hope the others do
 			}
-			defer res.Body.Close()
+			defer rawResponse.Body.Close()
 
-			packageFileBody, err := ioutil.ReadAll(res.Body)
+			packageFileBody, err := ioutil.ReadAll(rawResponse.Body)
 			if err != nil {
 				fmt.Printf("Could not read body of package.json for %v\n%v", packageFileURL, err)
 				continue
