@@ -69,7 +69,7 @@ func getCache() *cache.Cache {
 }
 
 func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulator chan<- model.PackageEdges, dependencyCache *cache.Cache) {
-	var wg *sync.WaitGroup
+	var wg sync.WaitGroup
 	threads := SLICES / 2
 	for i := 0; i < threads; i++ {
 		wg.Add(1)
@@ -117,22 +117,7 @@ func main() {
 	go mapPackageFiles(repoRows, treeAccumulator)
 	go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
 
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		for {
-			v, ok := <-edgeAccumulator
-			if !ok {
-				break
-			}
-			fmt.Printf("%v\n\n", v)
-		}
-		wg.Done()
-	}()
-
 	// map dependencies and devDependencies to trees of
 
 	// reduce/accumulate results into file (reduce to csv where id is parent repo ID and one row for every dependency where the dependency is the GitHub URL)
-
-	wg.Wait()
 }
