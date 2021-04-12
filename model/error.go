@@ -20,9 +20,8 @@ func (e *RepoNoPackage) Error() string {
 
 type ConnectionError struct {
 	RepositoryURL string
-	StatusMessage string
 }
 
 func (e *ConnectionError) Error() string {
-	return fmt.Sprintf("The repository with URL %s could not be scraped with status message '%s'\n", e.RepositoryURL, e.StatusMessage)
+	return fmt.Sprintf("The repository with URL %s could not be scraped\n", e.RepositoryURL)
 }

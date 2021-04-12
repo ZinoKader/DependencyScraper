@@ -35,7 +35,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	res1, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch github page of %v\n%v", ghURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer res1.Body.Close()
 
@@ -63,14 +63,14 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// visit file finder page for repo and find the URL for the filetree
 	repoFileFinderURL = fmt.Sprintf("https://github.com%s", repoFileFinderURL)
 	req, err = http.NewRequest("GET", repoFileFinderURL, nil)
-		if err != nil {
-			return model.DependencyTree{}, err
-		}
+	if err != nil {
+		return model.DependencyTree{}, err
+	}
 	req.Close = true
 	res2, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file finder page of %v\n%v", repoFileFinderURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer res2.Body.Close()
 
@@ -88,7 +88,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	req.Close = true
 	if err != nil {
 		fmt.Println("Could not create new request for file tree page", err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	// this header is needed to trick GitHub into thinking the request was made from the client
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
@@ -96,7 +96,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	res3, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
-		return model.DependencyTree{}, err
+		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer res3.Body.Close()
 
@@ -117,7 +117,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s", ownerName, repoName, repoMainBranchName, path)
 			req, err := http.NewRequest("GET", packageFileURL, nil)
 			if err != nil {
-						return model.DependencyTree{}, err
+				return model.DependencyTree{}, err
 			}
 			req.Close = true
 			res, err := httpClient.Do(req)
