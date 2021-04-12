@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -44,31 +43,35 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 				repoName := row.Name
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
 				if err != nil {
-					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
+					log.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
 					switch err.(type) {
 					case *model.ConnectionError:
 						// handle marking this repo as "retry"
 						connectionError := err.(*model.ConnectionError)
 						e := data.AppendToFile("retry.txt", connectionError.RepositoryURL)
 						if e != nil {
-							fmt.Printf("Failed adding repository %s to retry list", connectionError.RepositoryURL)
+							log.Printf("Failed adding repository %s to retry list", connectionError.RepositoryURL)
 						}
 						continue
 					case *model.RepoNoPackage:
 						// handle marking this repo as "do-not-retry"
-						noPackageError := err.(*model.RepoNoPackage)
-						e := data.AppendToFile("no-retry.txt", noPackageError.RepositoryURL)
-						if e != nil {
-							fmt.Printf("Failed adding repository %s to do-not-retry list", noPackageError.RepositoryURL)
-						}
+						/*
+							noPackageError := err.(*model.RepoNoPackage)
+							e := data.AppendToFile("no-retry.txt", noPackageError.RepositoryURL)
+							if e != nil {
+								log.Printf("Failed adding repository %s to do-not-retry list", noPackageError.RepositoryURL)
+							}
+						*/
 						continue
 					case *model.RepoNotExist:
 						// handle marking this repo as "do-not-retry"
-						notExistError := err.(*model.RepoNotExist)
-						e := data.AppendToFile("no-retry.txt", notExistError.RepositoryURL)
-						if e != nil {
-							fmt.Printf("Failed adding repository %s to do-not-retry list", notExistError.RepositoryURL)
-						}
+						/*
+							notExistError := err.(*model.RepoNotExist)
+							e := data.AppendToFile("no-retry.txt", notExistError.RepositoryURL)
+							if e != nil {
+								log.Printf("Failed adding repository %s to do-not-retry list", notExistError.RepositoryURL)
+							}
+						*/
 						continue
 					default:
 						continue
@@ -110,7 +113,7 @@ func getCache() *cache.Cache {
 }
 
 func saveCache(dependencyCache *cache.Cache) error {
-	cachedData := dependencyCache.Items()	
+	cachedData := dependencyCache.Items()
 
 	jsonData, err := json.Marshal(cachedData)
 
@@ -119,7 +122,7 @@ func saveCache(dependencyCache *cache.Cache) error {
 	}
 
 	err = ioutil.WriteFile("cache.json", jsonData, os.ModePerm)
-	
+
 	return err
 }
 
@@ -155,8 +158,7 @@ func reduceToFile(edgeAccumulator <-chan model.PackageEdges, outputPath string) 
 		}
 	}
 	data.WriteToFile(outputPath, buf.Bytes())
-	
-	
+
 }
 
 func setup() {
@@ -169,7 +171,7 @@ func setup() {
 func main() {
 	// read input file and output file
 	if len(os.Args) != 3 {
-		fmt.Println("Usage: ", os.Args[0], "{input file path} [csv]", "{output file path} [csv]")
+		log.Println("Usage: ", os.Args[0], "{input file path} [csv]", "{output file path} [csv]")
 		return
 	}
 	inputPath := os.Args[1]
