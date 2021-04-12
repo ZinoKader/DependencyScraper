@@ -39,25 +39,32 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 				ownerName := URLParts[len(URLParts)-2]
 				repoName := row.Name
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
-				dependencyTree.ID = row.ID
 				if err != nil {
 					fmt.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
-					switch err.(type) {
-					case *model.ConnectionError:
-						// handle marking this repo as "retry"
-						// connectionError := err.(*model.ConnectionError)
-					case *model.RepoNoPackage:
-						// handle marking this repo as "do-not-retry"
-						// noPackageError := err.(*model.RepoNoPackage)
-					case *model.RepoNotExist:
-						// handle marking this repo as "do-not-retry"
-						// notExistError := err.(*model.RepoNotExist)
-					default:
-					}
 					continue
+					/*
+						switch err.(type) {
+						case *model.ConnectionError:
+							// handle marking this repo as "retry"
+							// connectionError := err.(*model.ConnectionError)
+							continue
+						case *model.RepoNoPackage:
+							// handle marking this repo as "do-not-retry"
+							// noPackageError := err.(*model.RepoNoPackage)
+							continue
+						case *model.RepoNotExist:
+							// handle marking this repo as "do-not-retry"
+							// notExistError := err.(*model.RepoNotExist)
+							continue
+						default:
+							continue
+						}
+					*/
+				} else {
+					dependencyTree.ID = row.ID
+					// push parsed dependency tree to accumulator
+					treeAccumulator <- dependencyTree
 				}
-				// push parsed dependency tree to accumulator
-				treeAccumulator <- dependencyTree
 			}
 			wg.Done()
 		}()

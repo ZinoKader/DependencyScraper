@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"strings"
 
 	"github.com/patrickmn/go-cache"
@@ -25,7 +24,7 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 			continue
 		}
 
-		response, err := http.Get(url)
+		response, err := httpClient.Get(url)
 
 		if err != nil {
 			log.Println(err)

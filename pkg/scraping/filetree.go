@@ -4,32 +4,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ZinoKader/KEX/model"
 	"github.com/ZinoKader/KEX/pkg/data"
-	"github.com/deckarep/golang-set"
+	mapset "github.com/deckarep/golang-set"
 )
 
 type GithubFileTree struct {
 	Paths []string `json:"paths"`
 }
 
-var PROXIES = data.ProxyList()
-
-var httpClient = &http.Client{
-	Timeout: time.Second * 10,
-}
-
 func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree, error) {
 
 	// try setting proxy
-	proxyUrl, _ := url.Parse(fmt.Sprintf("http://%s", randomProxy()))
+	proxyUrl, _ := url.Parse(fmt.Sprintf("http://%s", RandomProxy()))
 	httpClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
 
 	// visit main repo page and extract main branch name and file finder URL
@@ -82,6 +74,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 	// visit the file tree for the repo and extract the paths to the package.json files
 	req, err := http.NewRequest("GET", repoFileTreeURL, nil)
+	req.Close = true
 	if err != nil {
 		fmt.Println("Could not create new request for file tree page", err)
 		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL, StatusMessage: res.Status}
@@ -110,7 +103,6 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// fetch and read raw package.json files
 	for _, path := range fileTree.Paths {
 		if strings.Contains(path, "package.json") && !strings.Contains(path, "node_modules") {
-
 			packageFileURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s", ownerName, repoName, repoMainBranchName, path)
 			res, err := httpClient.Get(packageFileURL)
 			if err != nil {
@@ -129,14 +121,12 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 				fmt.Printf("Could not parse package.json for %v\n%v", packageFileURL, err)
 				continue
 			}
+			dependencyCollector = dependencyCollector.Union(dependencies)
+		}
+	}
 
-			for _, dependency := range dependencies {
-				dependencyCollector.Add(dependency)
-			}
-		}
-		for _, dependency := range dependencyCollector.ToSlice() {
-			dependencyTree.Dependencies = append(dependencyTree.Dependencies, dependency.(string))
-		}
+	for _, dependency := range dependencyCollector.ToSlice() {
+		dependencyTree.Dependencies = append(dependencyTree.Dependencies, dependency.(string))
 	}
 
 	// no package.json file, not a repo we can include in the dependency graph
@@ -147,8 +137,4 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	}
 
 	return *dependencyTree, nil
-}
-
-func randomProxy() string {
-	return PROXIES[rand.Intn(len(PROXIES))]
 }

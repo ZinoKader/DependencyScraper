@@ -7,13 +7,13 @@ import (
 	mapset "github.com/deckarep/golang-set"
 )
 
-func ParsePackage(packageData []byte) ([]string, error) {
+func ParsePackage(packageData []byte) (mapset.Set, error) {
 	dependencyCollector := mapset.NewSet()
 
 	var v interface{}
 	err := json.Unmarshal(packageData, &v)
 	if err != nil {
-		return []string{}, err
+		return dependencyCollector, err
 	}
 	data := v.(map[string]interface{})
 
@@ -34,10 +34,5 @@ func ParsePackage(packageData []byte) ([]string, error) {
 		}
 	}
 
-	res := []string{}
-	for _, dependency := range dependencyCollector.ToSlice() {
-		res = append(res, dependency.(string))
-	}
-
-	return res, nil
+	return dependencyCollector, nil
 }
