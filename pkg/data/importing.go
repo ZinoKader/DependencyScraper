@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	model "github.com/ZinoKader/KEX/model"
+	"github.com/ZinoKader/KEX/model"
 )
 
 func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
