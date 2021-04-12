@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"runtime"
@@ -75,7 +77,37 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 
 func getCache() *cache.Cache {
 	//TODO: Read map from file
-	return cache.New(cache.NoExpiration, 0)
+	file, err := os.Open("cache.json")
+	if err != nil {
+		return cache.New(cache.NoExpiration, 0)
+	}
+
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return cache.New(cache.NoExpiration, 0)
+	}
+
+	cacheMap := make(map[string]cache.Item)
+
+	err = json.Unmarshal(data, &cacheMap)
+	if err != nil {
+		return cache.New(cache.NoExpiration, 0)
+	}
+	return cache.NewFrom(cache.NoExpiration, 0, cacheMap)
+}
+
+func saveCache(dependencyCache *cache.Cache) error {
+	cachedData := dependencyCache.Items()	
+
+	jsonData, err := json.Marshal(cachedData)
+
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile("cache.json", jsonData, os.ModePerm)
+	
+	return err
 }
 
 func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulator chan<- model.PackageEdges, dependencyCache *cache.Cache) {
@@ -110,6 +142,8 @@ func reduceToFile(edgeAccumulator <-chan model.PackageEdges, outputPath string) 
 		}
 	}
 	data.WriteToFile(outputPath, buf.Bytes())
+	
+	
 }
 
 func setup() {
@@ -139,6 +173,8 @@ func main() {
 	go mapPackageFiles(repoRows, treeAccumulator)
 	go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
 	reduceToFile(edgeAccumulator, outputPath)
+
+	saveCache(dependencyCache)
 
 	// map dependencies and devDependencies to trees of
 
