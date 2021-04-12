@@ -33,7 +33,8 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 		}
 
 		wg.Add(1)
-		go func() {
+		go func(wg *sync.WaitGroup, treeAccumulator chan<- model.DependencyTree, reposPart []model.RepositoryFileRow ) {
+			defer wg.Done()
 			for _, row := range reposPart {
 				URLParts := strings.Split(row.URL, "/")
 				ownerName := URLParts[len(URLParts)-2]
@@ -66,8 +67,7 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 					treeAccumulator <- dependencyTree
 				}
 			}
-			wg.Done()
-		}()
+		}(&wg, treeAccumulator,reposPart)
 	}
 	wg.Wait()
 	close(treeAccumulator)
@@ -83,7 +83,8 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 	threads := SLICES / 2
 	for i := 0; i < threads; i++ {
 		wg.Add(1)
-		go func() {
+		go func(wg *sync.WaitGroup, treeActreeAccumulator <- chan model.DependencyTree, ededgeAccumulator chan<- model.PackageEdges) {
+			defer wg.Done()
 			for tree := range treeAccumulator {
 				dependencyURLs := scraping.RepoDependencies(tree.Dependencies, dependencyCache)
 				edges := model.PackageEdges{
@@ -92,8 +93,7 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 				}
 				edgeAccumulator <- edges
 			}
-			wg.Done()
-		}()
+		}(&wg, treeAccumulator, edgeAccumulator)
 	}
 	wg.Wait()
 	close(edgeAccumulator)

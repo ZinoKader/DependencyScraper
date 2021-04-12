@@ -48,7 +48,8 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 		} else {
 			continue
 		}
-
+		
+		repoURL = strings.ReplaceAll(repoURL, "www.", "")
 		repoURLs = append(repoURLs, repoURL)
 		dependencyCache.Add(dependency, repoURL, cache.NoExpiration)
 	}
