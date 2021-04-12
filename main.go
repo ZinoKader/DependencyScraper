@@ -131,8 +131,8 @@ func main() {
 
 	dependencyCache := getCache()
 
-	treeAccumulator := make(chan model.DependencyTree)
-	edgeAccumulator := make(chan model.PackageEdges)
+	treeAccumulator := make(chan model.DependencyTree, SLICES/2)
+	edgeAccumulator := make(chan model.PackageEdges, SLICES/2)
 
 	setup()
 
