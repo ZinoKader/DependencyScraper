@@ -3,7 +3,6 @@ package data
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -14,7 +13,7 @@ import (
 func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
 	repoFile, err := os.Open(inputFile)
 	if err != nil {
-		fmt.Println("Could not open repository file", err)
+		log.Println("Could not open repository file", err)
 	}
 	defer repoFile.Close()
 
@@ -26,7 +25,7 @@ func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
 
 	csvLines, err := csvReader.ReadAll()
 	if err != nil {
-		fmt.Println("Could not read repository file lines", err)
+		log.Println("Could not read repository file lines", err)
 	}
 
 	var repoFileRows []model.RepositoryFileRow
@@ -35,7 +34,7 @@ func RepositoryFileRows(inputFile string) []model.RepositoryFileRow {
 		var url = line[2]
 		id, err := strconv.Atoi(line[0])
 		if err != nil {
-			fmt.Printf("Could not load row of repo %s\n%v", url, err)
+			log.Printf("Could not load row of repo %s\n%v", url, err)
 			continue
 		}
 		row := model.RepositoryFileRow{
