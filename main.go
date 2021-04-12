@@ -17,11 +17,10 @@ import (
 
 var SLICES = runtime.NumCPU()
 
-func mapPackageFiles(repos []model.RepositoryFileRow, edgeAccumulator chan  <- model.PackageEdges, dependencyCache *cache.Cache) {
-	var edgeWg sync.WaitGroup
+func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- model.DependencyTree) {
+	var wg sync.WaitGroup
 	partSize := len(repos) / SLICES
 	for i := 0; i < len(repos); i += partSize {
-		var treeWg sync.WaitGroup
 		var reposPart []model.RepositoryFileRow
 		if i+partSize > len(repos) {
 			reposPart = repos[i:]
@@ -30,9 +29,7 @@ func mapPackageFiles(repos []model.RepositoryFileRow, edgeAccumulator chan  <- m
 			reposPart = repos[i : i+partSize]
 		}
 
-		treeAccumulator := make(chan model.DependencyTree)
-
-		treeWg.Add(1)
+		wg.Add(1)
 		go func() {
 			for _, row := range reposPart {
 				URLParts := strings.Split(row.URL, "/")
@@ -59,30 +56,37 @@ func mapPackageFiles(repos []model.RepositoryFileRow, edgeAccumulator chan  <- m
 				// push parsed dependency tree to accumulator
 				treeAccumulator <- dependencyTree
 			}
-			treeWg.Done()
+			wg.Done()
 		}()
-	
-		edgeWg.Add(1)
-		go func() {
+	}
+	wg.Wait()
+	close(treeAccumulator)
+}
 
+func getCache() *cache.Cache {
+	//TODO: Read map from file
+	return cache.New(cache.NoExpiration, 0)
+}
+
+func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulator chan<- model.PackageEdges, dependencyCache *cache.Cache) {
+	var wg *sync.WaitGroup
+	threads := SLICES / 2
+	for i := 0; i < threads; i++ {
+		wg.Add(1)
+		go func() {
 			for tree := range treeAccumulator {
 				fmt.Println(dependencyCache.Items())
-				dependencyURLs := scraping.RepoDependencies(tree.Dependencies, dependencyCache) 				
-
+				dependencyURLs := scraping.RepoDependencies(tree.Dependencies, dependencyCache)
 				edges := model.PackageEdges{
-					ID: 							tree.ID, 
-					DependencyURLs: 	dependencyURLs,
-				}	
-
+					ID:             tree.ID,
+					DependencyURLs: dependencyURLs,
+				}
 				edgeAccumulator <- edges
 			}
-			edgeWg.Done()
+			wg.Done()
 		}()
-
-		treeWg.Wait()
-		close(treeAccumulator)
 	}
-	edgeWg.Wait()
+	wg.Wait()
 	close(edgeAccumulator)
 }
 
@@ -103,19 +107,21 @@ func main() {
 	//outputPath := os.Args[2]
 	repoRows := data.RepositoryFileRows(inputPath)
 
-	dependencyCache := cache.New(cache.NoExpiration, 0)
+	dependencyCache := getCache()
+
+	treeAccumulator := make(chan model.DependencyTree)
 	edgeAccumulator := make(chan model.PackageEdges)
 
 	setup()
 
-	// map repo urls to dependency contents (dependencies and devDependencies)
-	go mapPackageFiles(repoRows, edgeAccumulator, dependencyCache)
+	go mapPackageFiles(repoRows, treeAccumulator)
+	go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
 
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
 		for {
-			v, ok := <- edgeAccumulator
+			v, ok := <-edgeAccumulator
 			if !ok {
 				break
 			}
