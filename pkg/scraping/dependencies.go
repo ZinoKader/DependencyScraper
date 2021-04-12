@@ -13,15 +13,16 @@ import (
 
 func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []string {
 
-	var repoUrls = []string{}
+	var repoURLs = []string{}
 	for _, dependency := range dependencies {
 
 		url := fmt.Sprintf("https://api.npms.io/v2/package/%s", dependency)
 
-		repoUrl, found := dependencyCache.Get(url)
+		cachedURL, found := dependencyCache.Get(url)
 
 		if found {
-			repoUrls = append(repoUrls, repoUrl.(string))
+			repoURLs = append(repoURLs, cachedURL.(string))
+			fmt.Println(cachedURL.(string))
 			continue
 		}
 
@@ -41,17 +42,17 @@ func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []str
 
 		results := gjson.GetManyBytes(bodyBytes, "collected.metadata.links.repository", "collected.metadata.repository.url")
 
-		var result string
+		var repoURL string
 		if len(results[0].String()) > 0 {
-			result = strings.Replace(results[0].String(), "github", "api.github", 1)
+			repoURL = strings.Replace(results[0].String(), "github", "api.github", 1)
 		} else if len(results[1].String()) > 0 && strings.Contains(results[1].String(), "https") {
-			result = strings.TrimSuffix(strings.Replace(results[1].String(), "git+https://github", "https://api.github", 1), ".git")
+			repoURL = strings.TrimSuffix(strings.Replace(results[1].String(), "git+https://github", "https://api.github", 1), ".git")
 		} else {
 			continue
 		}
 
-		repoUrls = append(repoUrls, result)
-		dependencyCache.Add(dependency, repoUrl, cache.NoExpiration)
+		repoURLs = append(repoURLs, repoURL)
+		dependencyCache.Add(dependency, repoURL, cache.NoExpiration)
 	}
-	return repoUrls
+	return repoURLs
 }
