@@ -1,1 +1,8 @@
 https://github.com/loizenai/reactjs-nodejs-jwt-token-authentication
+https://github.com/mitchas/cabinet
+https://github.com/wrlu/FaceDetection
+https://github.com/muhammedozdemr/Application-with-Vuejs
+https://github.com/everlose/chrome-extensions
+https://github.com/z3nz/jquery-watcher
+https://github.com/MOL0/deobfuscator-tool
+https://github.com/janryWang/react-eva
