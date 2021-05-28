@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"net/http"
+	"net/url"
 
 	"github.com/patrickmn/go-cache"
 	"github.com/tidwall/gjson"
@@ -12,10 +14,11 @@ import (
 
 func RepoDependencies(dependencies []string, dependencyCache *cache.Cache) []string {
 
+	proxyUrl, _ := url.Parse(fmt.Sprintf("http://%s", RandomProxy()))
+	httpClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
 	var repoURLs = []string{}
+
 	for _, dependency := range dependencies {
-
-
 		cachedURL, found := dependencyCache.Get(dependency)
 
 		if found {

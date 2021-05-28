@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -22,7 +23,8 @@ import (
 
 var SLICES = runtime.NumCPU()
 
-func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- model.DependencyTree) {
+func mapPackageFiles(repos []model.RepositoryFileRow, edgeAccumulator chan<- model.PackageEdges,
+	dependencyCache *cache.Cache) {
 	var wg sync.WaitGroup
 	partSize := len(repos) / SLICES
 	for i := 0; i < len(repos); i += partSize {
@@ -33,24 +35,26 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 		} else {
 			reposPart = repos[i : i+partSize]
 		}
-
+		fmt.Printf("reposSize: %d -- partSize: %d -- reposPart: %d -- from: %d, to: %d\n",
+		len(repos), partSize, len(reposPart), i, i + partSize - 1);
 		wg.Add(1)
-		go func(wg *sync.WaitGroup, treeAccumulator chan<- model.DependencyTree, reposPart []model.RepositoryFileRow) {
+		go func(wg *sync.WaitGroup, edgeAccumulator chan<- model.PackageEdges, reposPart []model.RepositoryFileRow, dependencyCache *cache.Cache) {
 			defer wg.Done()
+			defer log.Println("mapper done")
 			for _, row := range reposPart {
 				URLParts := strings.Split(row.URL, "/")
 				ownerName := URLParts[len(URLParts)-2]
 				repoName := row.Name
 				dependencyTree, err := scraping.RepoDependencyTree(ownerName, repoName)
 				if err != nil {
-					log.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
+					//log.Printf("Something went wrong when scraping the dependency tree for repo %s\n%v\n", row.URL, err)
 					switch err.(type) {
 					case *model.ConnectionError:
 						// handle marking this repo as "retry"
 						connectionError := err.(*model.ConnectionError)
 						e := data.AppendToFile("retry.txt", connectionError.RepositoryURL)
 						if e != nil {
-							log.Printf("Failed adding repository %s to retry list", connectionError.RepositoryURL)
+							//log.Printf("Failed adding repository %s to retry list", connectionError.RepositoryURL)
 						}
 						continue
 					case *model.RepoNoPackage:
@@ -79,13 +83,20 @@ func mapPackageFiles(repos []model.RepositoryFileRow, treeAccumulator chan<- mod
 				} else {
 					dependencyTree.ID = row.ID
 					// push parsed dependency tree to accumulator
-					treeAccumulator <- dependencyTree
+					//treeAccumulator <- dependencyTree
+					dependencyURLs := scraping.RepoDependencies(dependencyTree.Dependencies, dependencyCache)
+					edges := model.PackageEdges{
+						ID:            dependencyTree.ID,
+						DependencyURLs: dependencyURLs,
+					}
+					edgeAccumulator <- edges
 				}
 			}
-		}(&wg, treeAccumulator, reposPart)
+		}(&wg, edgeAccumulator, reposPart, dependencyCache)
 	}
 	wg.Wait()
-	close(treeAccumulator)
+	log.Println("\nClosing edgeAccumulator")
+	close(edgeAccumulator)
 }
 
 func getCache() *cache.Cache {
@@ -144,6 +155,7 @@ func mapDependencies(treeAccumulator <-chan model.DependencyTree, edgeAccumulato
 		}(&wg, treeAccumulator, edgeAccumulator)
 	}
 	wg.Wait()
+	log.Println("\nClosing edgeAccumulator")
 	close(edgeAccumulator)
 }
 
@@ -151,12 +163,15 @@ func reduceToFile(edgeAccumulator <-chan model.PackageEdges, outputPath string) 
 	var buf bytes.Buffer
 	writer := csv.NewWriter(&buf)
 	defer writer.Flush()
-
+	i := 1
 	for node := range edgeAccumulator {
 		for _, edge := range node.DependencyURLs {
+			fmt.Printf("\r%d/10 000 nodes received  Byte buffer size: %d ", i, buf.Len())
 			writer.Write([]string{strconv.Itoa(node.ID), edge})
 		}
+		i++
 	}
+	log.Println("\nSaving to file")
 	data.WriteToFile(outputPath, buf.Bytes())
 
 }
@@ -180,13 +195,13 @@ func main() {
 
 	dependencyCache := getCache()
 
-	treeAccumulator := make(chan model.DependencyTree, SLICES/2)
-	edgeAccumulator := make(chan model.PackageEdges, SLICES/2)
+	//treeAccumulator := make(chan model.DependencyTree)
+	edgeAccumulator := make(chan model.PackageEdges, SLICES)
 
 	setup()
 
-	go mapPackageFiles(repoRows, treeAccumulator)
-	go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
+	go mapPackageFiles(repoRows, edgeAccumulator, dependencyCache)
+	//go mapDependencies(treeAccumulator, edgeAccumulator, dependencyCache)
 	reduceToFile(edgeAccumulator, outputPath)
 
 	saveCache(dependencyCache)
