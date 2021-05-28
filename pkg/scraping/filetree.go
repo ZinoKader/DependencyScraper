@@ -33,14 +33,14 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 	repoPageResponse, err := httpClient.Do(req)
 	if err != nil {
-		//log.Printf("Could not fetch github page of %v\n%v", ghURL, err)
+		log.Printf("Could not fetch github page of %v\n%v", ghURL, err)
 		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer repoPageResponse.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(repoPageResponse.Body)
 	if err != nil {
-		//log.Printf("Could not parse HTML of %v\n %v", ghURL, err)
+		log.Printf("Could not parse HTML of %v\n %v", ghURL, err)
 		return model.DependencyTree{}, err
 	}
 
@@ -68,14 +68,14 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 	repoFileFinderResponse, err := httpClient.Do(req)
 	if err != nil {
-		//log.Printf("Could not fetch file finder page of %v\n%v", repoFileFinderURL, err)
+		log.Printf("Could not fetch file finder page of %v\n%v", repoFileFinderURL, err)
 		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer repoFileFinderResponse.Body.Close()
 
 	doc, err = goquery.NewDocumentFromReader(repoFileFinderResponse.Body)
 	if err != nil {
-		//log.Println("Could not init goquery for file finder page", err)
+		log.Println("Could not init goquery for file finder page", err)
 		return model.DependencyTree{}, err
 	}
 
@@ -85,7 +85,7 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 	// visit the file tree for the repo and extract the paths to the package.json files
 	req, err = CreateRequest(repoFileTreeURL)
 	if err != nil {
-		//log.Println("Could not create new request for file tree page", err)
+		log.Println("Could not create new request for file tree page", err)
 		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	// this header is needed to trick GitHub into thinking the request was made from the client
@@ -93,14 +93,14 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 	fileTreeResponse, err := httpClient.Do(req)
 	if err != nil {
-		//log.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
+		log.Printf("Could not fetch file tree page for %v\n%v", repoFileTreeURL, err)
 		return model.DependencyTree{}, &model.ConnectionError{RepositoryURL: ghURL}
 	}
 	defer fileTreeResponse.Body.Close()
 
 	fileTreeBody, err := ioutil.ReadAll(fileTreeResponse.Body)
 	if err != nil {
-		//log.Printf("Could not read body of tree page for %v\n%v", repoFileTreeURL, err)
+		log.Printf("Could not read body of tree page for %v\n%v", repoFileTreeURL, err)
 		return model.DependencyTree{}, err
 	}
 
@@ -120,19 +120,19 @@ func RepoDependencyTree(ownerName string, repoName string) (model.DependencyTree
 
 			rawResponse, err := httpClient.Do(req)
 			if err != nil {
-				//log.Printf("Could not fetch raw dependency for %v\n%v", packageFileURL, err)
+				log.Printf("Could not fetch raw dependency for %v\n%v", packageFileURL, err)
 				continue // do our best effort, if this particular file did not work, hope the others do
 			}
 			defer rawResponse.Body.Close()
 
 			packageFileBody, err := ioutil.ReadAll(rawResponse.Body)
 			if err != nil {
-				//log.Printf("Could not read body of package.json for %v\n%v", packageFileURL, err)
+				log.Printf("Could not read body of package.json for %v\n%v", packageFileURL, err)
 				continue
 			}
 			dependencies, err := data.ParsePackage(packageFileBody)
 			if err != nil {
-				//log.Printf("Could not parse package.json for %v\n%v", packageFileURL, err)
+				log.Printf("Could not parse package.json for %v\n%v", packageFileURL, err)
 				continue
 			}
 			dependencyCollector = dependencyCollector.Union(dependencies)
