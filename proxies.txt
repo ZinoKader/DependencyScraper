@@ -1,3 +1,6 @@
+LEFT HERE FOR FORMAT, THESE NO LONGER WORK!
+--- --- --- --- --- --- --- --- --- --- ---
+
 pfsygjdh-dest:7dtbnrjook5s@192.166.153.7:8082
 pfsygjdh-dest:7dtbnrjook5s@45.94.47.59:8103
 pfsygjdh-dest:7dtbnrjook5s@45.155.68.14:8018
