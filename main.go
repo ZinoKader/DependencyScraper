@@ -153,12 +153,10 @@ func reduceToFile(edgeAccumulator <-chan model.PackageEdges, outputPath string) 
 	var buf bytes.Buffer
 	writer := csv.NewWriter(&buf)
 	defer writer.Flush()
-	i := 1
 	for node := range edgeAccumulator {
 		for _, edge := range node.DependencyURLs {
 			writer.Write([]string{strconv.Itoa(node.ID), edge})
 		}
-		i++
 	}
 	log.Println("\nSaving to file")
 	data.WriteToFile(outputPath, buf.Bytes())
